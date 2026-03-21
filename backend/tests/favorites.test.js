@@ -10,7 +10,7 @@ const booksFile = path.join(__dirname, '../data/test-books.json');
 // Helper to get a valid JWT
 const jwt = require('jsonwebtoken');
 const SECRET_KEY = 'test_secret';
-function getToken(username = 'sandra') {
+function getToken(username = 'user1') {
   return jwt.sign({ username }, SECRET_KEY, { expiresIn: '1h' });
 }
 
@@ -42,7 +42,7 @@ describe('Favorites API', () => {
   });
 
   it('GET /api/favorites should return favorites for valid user', async () => {
-    const token = getToken('sandra');
+    const token = getToken('user1');
     const res = await request(app)
       .get('/api/favorites')
       .set('Authorization', `Bearer ${token}`);
@@ -59,12 +59,12 @@ describe('Favorites API', () => {
   });
 
   it('POST /api/favorites should add a book to favorites', async () => {
-    const token = getToken('sandra');
+    const token = getToken('user1');
     // Pick a book not already in favorites
     const books = JSON.parse(fs.readFileSync(booksFile, 'utf-8'));
     const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-    const sandra = users.find(u => u.username === 'sandra');
-    const notFav = books.find(b => !sandra.favorites.includes(b.id));
+    const user1 = users.find(u => u.username === 'user1');
+    const notFav = books.find(b => !user1.favorites.includes(b.id));
     if (!notFav) return; // skip if all are favorites
     const res = await request(app)
       .post('/api/favorites')
@@ -75,10 +75,10 @@ describe('Favorites API', () => {
   });
 
   it('POST /api/favorites should not duplicate favorites', async () => {
-    const token = getToken('sandra');
+    const token = getToken('user1');
     const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-    const sandra = users.find(u => u.username === 'sandra');
-    const alreadyFav = sandra.favorites[0];
+    const user1 = users.find(u => u.username === 'user1');
+    const alreadyFav = user1.favorites[0];
     const res = await request(app)
       .post('/api/favorites')
       .set('Authorization', `Bearer ${token}`)
@@ -88,7 +88,7 @@ describe('Favorites API', () => {
   });
 
   it('POST /api/favorites should fail with missing bookId', async () => {
-    const token = getToken('sandra');
+    const token = getToken('user1');
     const res = await request(app)
       .post('/api/favorites')
       .set('Authorization', `Bearer ${token}`)
