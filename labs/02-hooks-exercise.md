@@ -50,13 +50,7 @@ Hooks provide **deterministic, code-driven automation** that runs at specific po
 
 **Objective:** Create two global hooks that apply to all agents: a `PostToolUse` hook that auto-formats code after every edit, and a `PreToolUse` hook that blocks dangerous terminal commands.
 
-### Exercise 1.1 - Create the Hooks Folder and Install Prettier
-
-Create the hooks directory using the **gear icon** in the Chat view:
-
-*   Click the **gear icon** (⚙) at the top of the Chat panel
-*   Select **Hooks** from the menu
-*   This creates the `.github/hooks/` directory if it doesn't exist
+### Exercise 1.1 - Install Prettier
 
 Install Prettier from the `copilot-agent-and-mcp/` directory:
 
@@ -152,7 +146,7 @@ Then create the hook config `format.json`:
 
 > "Create a new file called `backend/test-format.js` with a function that uses inconsistent formatting: mixed tabs and spaces, double quotes in some places and single quotes in others, and missing semicolons."
 
-1.  After the agent creates the file, check whether Prettier ran automatically.
+1.  After the agent creates the file, check whether Prettier ran automatically. Use prompt `don't show me current file, show me the original with inconsistent formatting: mixed tabs and spaces, double quotes in some places and single quotes in others, and missing semicolons` to see the unformatted version, which it should display in the chat.
 
 **Verify:**
 
