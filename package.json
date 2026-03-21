@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
+    "install:all": "npm install && cd frontend && npm install",
+    "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && node server.js",
     "start:frontend": "cd frontend && npm run dev",
     "build:frontend": "cd frontend && npm run build",
@@ -21,6 +23,7 @@
     "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
+    "concurrently": "^9.2.1",
     "cypress": "^14.4.1",
     "jest": "^29.7.0",
     "supertest": "^7.1.1"

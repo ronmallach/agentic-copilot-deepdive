@@ -46,34 +46,18 @@ Book Favorites is a full-stack web application that allows users to:
 
 2. **Install dependencies:**
   ```bash
-    npm install
-    cd frontend
-    npm install
-    cd ..
+    npm run install:all
   ```
 
-3. **Run the backend server:**
+3. **Run the app (backend + frontend):**
    ```bash
-   npm run start:backend
+   npm start
    ```
-   The backend runs on [http://localhost:4000](http://localhost:4000)
+   The backend runs on [http://localhost:4000](http://localhost:4000) and the frontend on [http://localhost:5173](http://localhost:5173)
 
-   ![Backend execution logs example](./images/backend-execution-logs-example.png)
-
-4. **Run the frontend app:**
+4. **Run the tests (optional):**
 
    Open a second terminal.
-
-   ```bash
-   npm run start:frontend
-   ```
-   The frontend runs on [http://localhost:5173](http://localhost:5173)
-
-   ![Frontend execution logs example](./images/frontend-execution-logs-example.png)
-
-5. **Run the tests (optional):**
-
-   Open a third terminal.
 
    ```bash
    npm run test
@@ -81,6 +65,6 @@ Book Favorites is a full-stack web application that allows users to:
 
    ![Tests execution logs example](./images/tests-execution-logs-example.png)
 
-6. **Usage:**
-   - Register a new account or log in with an existing one (`sandra`/`sandra`)).
+5. **Usage:**
+   - Register a new account or log in with an existing one (`user1`/`user1`).
    - Browse books, add favorites, and enjoy the app!
