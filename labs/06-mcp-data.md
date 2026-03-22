@@ -6,28 +6,104 @@
 
 ---
 
+## Recover Original Books Data (If Corrupted)
+
+If the `backend/data/books.json` file contains test data or has been modified, follow these steps to restore the original book catalog before starting the exercises.
+
+### Option 1: Manual Restore from Backup
+
+If you have a backup file (`books.backup.json`), restore it directly:
+
+**Windows PowerShell:**
+
+```powershell
+Copy-Item -Path "backend/data/books.backup.json" -Destination "backend/data/books.json" -Force
+```
+
+**Verify the restore:**
+
+```powershell
+# Check the first entry (should be "To Kill a Mockingbird" by Harper Lee)
+Get-Content -Path "backend/data/books.json" -TotalCount 20
+```
+
+**For Linux/macOS:**
+
+```bash
+cp backend/data/books.backup.json backend/data/books.json
+head -20 backend/data/books.json
+```
+
+### Option 2: Use Copilot to Generate Recovery Steps
+
+In **Agent Mode**, ask Copilot to help recover the original data. The MCP server becomes your recovery mechanism:
+
+**Your question to Copilot:**
+
+```
+The backend/data/books.json file contains 5 test books instead of the original 20+ book catalog.
+I have a backup at backend/data/books.backup.json. What steps should I take to restore the original books.json from the backup?
+If a backup doesn't exist, what approaches can I use to rebuild the original catalog from the book-database MCP server?
+```
+
+**Copilot's response will suggest two paths:**
+
+**Path A: Restore from Backup (Fastest)**
+
+```powershell
+Copy-Item -Path "backend/data/books.backup.json" -Destination "backend/data/books.json" -Force
+```
+
+Verify the restore succeeded:
+
+```powershell
+$content = Get-Content -Path "backend/data/books.json" | ConvertFrom-Json
+Write-Host "Restored $($content.Count) books"
+```
+
+**Path B: Rebuild from MCP Server (If backup doesn't exist)**
+
+Ask Copilot to orchestrate the recovery using the MCP tools:
+
+```
+Use the book-database MCP server to retrieve the full list of books via the list_books tool.
+Then transform the results into backend/data/books.json format: [ { "id": "1", "title": "To Kill a Mockingbird", "author": "Harper Lee" }, ...].
+Generate the complete file with all available books from the MCP server, preserving the exact structure and order.
+```
+
+Copilot will:
+
+1. Call `list_books()` from the MCP server to fetch all books
+2. Transform the results to match the backend schema (id, title, author)
+3. Generate the corrected `backend/data/books.json` file
+4. Verify the file was created with the correct number of books
+
+This demonstrates MCP's value as a **recovery data source** — if your local data is corrupted, the MCP-exposed service becomes your single source of truth.
+
+---
+
 ## Objective
 
 Put the book-database MCP server you built in Lab 05 to work. Use it as a live data source from Copilot Chat to generate application features, produce test fixtures, and extend the server with a new tool. This lab teaches you how MCP servers become practical building blocks in AI-assisted development workflows.
 
 > **Note:** The book-database MCP server must be built, configured in `.vscode/mcp.json`, and running before starting this lab. If it isn't, complete [Lab 05](05-mcp-builder.md) first.
 
-| Exercise | Focus | What You Learn |
-| --- | --- | --- |
-| 1 | **Feature generation** | Use MCP data to generate a real feature for the BookFaves app - see MCP as a live data source for code generation |
-| 2 | **Test data generation** | Generate test fixtures and test cases from real MCP data - learn how MCP servers eliminate hand-written mock data |
-| 3 | **Extend the server** | Add a new tool to the MCP server, rebuild, and test - the full add-tool iteration cycle |
+| Exercise | Focus                    | What You Learn                                                                                                    |
+| -------- | ------------------------ | ----------------------------------------------------------------------------------------------------------------- |
+| 1        | **Feature generation**   | Use MCP data to generate a real feature for the BookFaves app - see MCP as a live data source for code generation |
+| 2        | **Test data generation** | Generate test fixtures and test cases from real MCP data - learn how MCP servers eliminate hand-written mock data |
+| 3        | **Extend the server**    | Add a new tool to the MCP server, rebuild, and test - the full add-tool iteration cycle                           |
 
 ---
 
 ## Prerequisites
 
-| Requirement | Details |
-| --- | --- |
-| **Lab 05 complete** | `book-database-mcp-server/` built and `npm run build` succeeds |
-| **MCP server configured** | `.vscode/mcp.json` includes the `book-database` server entry |
-| **MCP server running** | Start via Command Palette: `Ctrl+Shift+P` → **MCP: Start MCP server** → **book-database** |
-| **BookFaves app running** | `cd copilot-agent-and-mcp && npm install && npm start` (backend on :4000, frontend on :5173) |
+| Requirement               | Details                                                                                   |
+| ------------------------- | ----------------------------------------------------------------------------------------- |
+| **Lab 05 complete**       | `book-database-mcp-server/` built and `npm run build` succeeds                            |
+| **MCP server configured** | `.vscode/mcp.json` includes the `book-database` server entry                              |
+| **MCP server running**    | Start via Command Palette: `Ctrl+Shift+P` → **MCP: Start MCP server** → **book-database** |
+| **BookFaves app running** | `npm install && npm start` (backend on :4000, frontend on :5173)                          |
 
 ### Quick Check
 
@@ -47,38 +123,39 @@ Use the book-database MCP server to look up the book with ISBN 0451524935.
 
 ### Step 1: Understand the Current App
 
-The BookFaves app (`copilot-agent-and-mcp/`) has:
+The BookFaves app has:
+
 - **Backend:** Express.js API with routes for books, favorites, reading lists, and auth
 - **Frontend:** React app with components for BookList, Favorites, ReadingList, etc.
 - **Data:** Local JSON files for books and users
 
-The backend books data (`copilot-agent-and-mcp/backend/data/books.json`) uses a different schema than the MCP server's catalog. Your task is to enrich the app with data from the MCP server's catalog.
+The backend books data (`backend/data/books.json`) uses a different schema than the MCP server's catalog. Your task is to enrich the app with data from the MCP server's catalog.
 
 ### Step 2: Generate a Book Recommendations Endpoint
 
 Ask Copilot to generate a new backend endpoint that serves curated book recommendations, using real data from the MCP server to populate the initial dataset:
 
 ```
-I want to add a "Staff Picks" feature to the BookFaves app. Using the book-database MCP tools, look up these classic novels and get their full details: "1984", "The Great Gatsby", "Pride and Prejudice", "The Hobbit", and "To Kill a Mockingbird". Then create a new file copilot-agent-and-mcp/backend/routes/staffPicks.js that serves a GET /staff-picks endpoint returning these books as curated recommendations. Include the title, author, ISBN, summary, and publication date from the MCP data. Follow the same coding patterns used in the existing route files (books.js, favorites.js).
+I want to add a "Staff Picks" feature to the BookFaves app. Using the book-database MCP tools, look up these classic novels and get their full details: "1984", "The Great Gatsby", "Pride and Prejudice", "The Hobbit", and "To Kill a Mockingbird". Then create a new file backend/routes/staffPicks.js that serves a GET /staff-picks endpoint returning these books as curated recommendations. Include the title, author, ISBN, summary, and publication date from the MCP data. Follow the same coding patterns used in the existing route files (books.js, favorites.js).
 ```
 
 ### Step 3: Verify the Generated Code
 
 Check the generated route file:
 
-| Criteria | Expected |
-| --- | --- |
-| File location | `copilot-agent-and-mcp/backend/routes/staffPicks.js` |
-| Data accuracy | Titles, authors, ISBNs, summaries match the MCP server's catalog (not hallucinated) |
-| Code patterns | Uses `createSuccessResponse` / `createErrorResponse` from `../utils/apiUtils` |
-| Comment prefix | Comments begin with `generated-by-copilot:` |
+| Criteria       | Expected                                                                            |
+| -------------- | ----------------------------------------------------------------------------------- |
+| File location  | `backend/routes/staffPicks.js`                                                      |
+| Data accuracy  | Titles, authors, ISBNs, summaries match the MCP server's catalog (not hallucinated) |
+| Code patterns  | Uses `createSuccessResponse` / `createErrorResponse` from `../utils/apiUtils`       |
+| Comment prefix | Comments begin with `generated-by-copilot:`                                         |
 
 ### Step 4: Wire the Route
 
 Ask Copilot to register the new route:
 
 ```
-Register the staffPicks route in copilot-agent-and-mcp/backend/routes/index.js at the path /staff-picks. Follow the same pattern used for the other routes.
+Register the staffPicks route in backend/routes/index.js at the path /staff-picks. Follow the same pattern used for the other routes.
 ```
 
 ### Step 5: Restart the Backend Server
@@ -89,26 +166,24 @@ Node.js/Express loads routes at startup, so the running server process doesn't k
 2. Restart:
 
 ```
-cd copilot-agent-and-mcp
 npm start
 ```
 
 ### Step 6: Test the Endpoint
 
 ```
-curl http://localhost:4000/api/v1/staff-picks
+curl http://localhost:4000/api/staff-picks
 ```
 
-**Expected:** JSON response with 5 books, each containing accurate details pulled from the MCP catalog.
+**Expected:** JSON response with books, each containing accurate details pulled from the MCP catalog.
 
 ### Step 7: Run Backend Tests
 
 ```
-cd copilot-agent-and-mcp
 npm run test:backend
 ```
 
-Confirm existing tests still pass — the new route should not break anything.
+Confirm existing tests still pass and the new route should not break anything.
 
 ### Validation
 
@@ -126,19 +201,18 @@ Confirm existing tests still pass — the new route should not break anything.
 ### Step 1: Generate Test Fixtures
 
 ```
-Using the book-database MCP tools, look up these 5 books by ISBN: 0451524935, 0743273565, 0547928227, 0141439518, 0446310789. Then generate a JSON fixture file at copilot-agent-and-mcp/backend/tests/fixtures/staff-picks.json containing these books in the same format as the staff picks endpoint response. Use the real data from the MCP server — do not make up any values.
+Using the book-database MCP tools, look up these 5 books by ISBN: 0451524935, 0743273565, 0547928227, 0141439518, 0446310789. Then generate a JSON fixture file at backend/tests/fixtures/staff-picks.json containing these books in the same format as the staff picks endpoint response. Use the real data from the MCP server. Do not make up any values.
 ```
 
 ### Step 2: Generate a Test File
 
 ```
-Using the test fixture you just created and following the testing patterns in copilot-agent-and-mcp/backend/tests/, generate a Jest test file at copilot-agent-and-mcp/backend/tests/staffPicks.test.js that tests the GET /api/v1/staff-picks endpoint. Include tests for: (1) returns 200 status, (2) response contains the expected number of books, (3) each book has title, author, isbn, summary, and date fields. Follow the same patterns used by the existing test files.
+Using the test fixture you just created and following the testing patterns in backend/tests/, generate a Jest test file at backend/tests/staffPicks.test.js that tests the GET /api/v1/staff-picks endpoint. Include tests for: (1) returns 200 status, (2) response contains the expected number of books, (3) each book has title, author, isbn, summary, and date fields. Follow the same patterns used by the existing test files.
 ```
 
 ### Step 3: Run the Tests
 
 ```
-cd copilot-agent-and-mcp
 npm run test:backend
 ```
 
@@ -147,7 +221,7 @@ npm run test:backend
 Ask Copilot to cross-check:
 
 ```
-Use the book-database MCP tools to look up ISBN 0743273565. Compare the returned title and author against what's in copilot-agent-and-mcp/backend/tests/fixtures/staff-picks.json. Do they match exactly?
+Use the book-database MCP tools to look up ISBN 0743273565. Compare the returned title and author against what's in backend/tests/fixtures/staff-picks.json. Do they match exactly?
 ```
 
 **Expected:** Copilot confirms the fixture data matches the MCP server's catalog exactly.
@@ -163,7 +237,7 @@ Use the book-database MCP tools to look up ISBN 0743273565. Compare the returned
 
 ## Exercise 3: Extend the MCP Server with a New Tool
 
-> **Purpose:** Add a new tool to the MCP server, rebuild, and test it — completing the full development cycle. This teaches the iteration loop: implement → build → test with Inspector → test from Copilot Chat.
+> **Purpose:** Add a new tool to the MCP server, rebuild, and test it, completing the full development cycle. This teaches the iteration loop: implement → build → test with Inspector → test from Copilot Chat.
 
 ### Step 1: Design the Tool
 
@@ -192,12 +266,12 @@ npx @modelcontextprotocol/inspector node dist/index.js
 
 Test these cases in the Inspector:
 
-| # | Input | Expected |
-| --- | --- | --- |
-| 1 | `{ "author": "Tolkien" }` | The Hobbit and The Lord of the Rings |
-| 2 | `{ "author": "dostoevsky" }` | Crime and Punishment and The Brothers Karamazov |
-| 3 | `{ "author": "DICKENS" }` | Great Expectations, A Tale of Two Cities, David Copperfield |
-| 4 | `{ "author": "zzzzz" }` | Not-found message |
+| #   | Input                        | Expected                                                    |
+| --- | ---------------------------- | ----------------------------------------------------------- |
+| 1   | `{ "author": "Tolkien" }`    | The Hobbit and The Lord of the Rings                        |
+| 2   | `{ "author": "dostoevsky" }` | Crime and Punishment and The Brothers Karamazov             |
+| 3   | `{ "author": "DICKENS" }`    | Great Expectations, A Tale of Two Cities, David Copperfield |
+| 4   | `{ "author": "zzzzz" }`      | Not-found message                                           |
 
 ### Step 5: Restart the MCP Server in VS Code
 
@@ -235,14 +309,14 @@ Using the book-database tools, find all books by Charles Dickens. Then look up t
 
 ## Troubleshooting
 
-| Issue | Fix |
-| --- | --- |
-| MCP server not responding | Restart: `Ctrl+Shift+P` → **MCP: Stop MCP server**, then **MCP: Start MCP server** |
-| Copilot doesn't use MCP tools | Start your prompt with "Use the book-database MCP server to..." |
-| New tool not appearing | Run `npm run build` in `book-database-mcp-server/`, then restart the MCP server in VS Code |
-| Test fixture data is wrong | Re-generate fixtures — always pull from MCP, never edit manually |
-| Backend tests fail after changes | Run `npm run test:backend` and check for import/route registration issues |
-| `get_books_by_author` matches too broadly | Ensure the service function filters on the `author` field only, not all fields |
+| Issue                                     | Fix                                                                                        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------ |
+| MCP server not responding                 | Restart: `Ctrl+Shift+P` → **MCP: Stop MCP server**, then **MCP: Start MCP server**         |
+| Copilot doesn't use MCP tools             | Start your prompt with "Use the book-database MCP server to..."                            |
+| New tool not appearing                    | Run `npm run build` in `book-database-mcp-server/`, then restart the MCP server in VS Code |
+| Test fixture data is wrong                | Re-generate fixtures — always pull from MCP, never edit manually                           |
+| Backend tests fail after changes          | Run `npm run test:backend` and check for import/route registration issues                  |
+| `get_books_by_author` matches too broadly | Ensure the service function filters on the `author` field only, not all fields             |
 
 ---
 
@@ -250,8 +324,8 @@ Using the book-database tools, find all books by Charles Dickens. Then look up t
 
 In this lab you exercised the MCP server across three practical scenarios:
 
-| Exercise | What You Did | Key Takeaway |
-| --- | --- | --- |
-| 1 | Generated a feature with real MCP data | MCP eliminates hallucinated placeholder data in code generation |
-| 2 | Generated test fixtures from MCP | Real data from MCP servers produces reliable, accurate test suites |
-| 3 | Extended the server with a new tool | The full cycle: implement → build → test → integrate |
+| Exercise | What You Did                           | Key Takeaway                                                       |
+| -------- | -------------------------------------- | ------------------------------------------------------------------ |
+| 1        | Generated a feature with real MCP data | MCP eliminates hallucinated placeholder data in code generation    |
+| 2        | Generated test fixtures from MCP       | Real data from MCP servers produces reliable, accurate test suites |
+| 3        | Extended the server with a new tool    | The full cycle: implement → build → test → integrate               |
