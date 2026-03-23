@@ -19,20 +19,11 @@ jobs:
         node-version: '20'
         cache: 'npm'
 
-    - name: Install root dependencies
-      run: npm ci
-
-    - name: Install frontend dependencies
-      working-directory: frontend
-      run: npm ci
+    - name: Install all dependencies
+      run: npm run install:all
 
     - name: Run backend tests
       run: npm run test:backend
 
-    - name: Build frontend
-      working-directory: frontend
-      run: npm run build
-
     - name: Run E2E tests
-      run: |
-        npm run test:frontend
+      run: npm run build:frontend && npm run test:frontend
