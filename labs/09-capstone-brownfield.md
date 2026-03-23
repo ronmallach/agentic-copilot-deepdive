@@ -1,4 +1,4 @@
-# Lab 08 - Capstone: Production Feature Sprint
+# Lab 09 - Capstone: Production Feature Sprint
 
 > **Mode:** VS Code (Agent Mode)
 > **Duration:** 60 minutes

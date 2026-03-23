@@ -1,4 +1,4 @@
-# Lab 02 - Coding Agent: Autonomous PR Workflow
+# Lab 07 - Coding Agent: Autonomous PR Workflow
 
 > **Mode:** GitHub.com  
 > **Duration:** 35 min  

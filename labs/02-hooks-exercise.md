@@ -1,4 +1,4 @@
-# Lab: Agent Hooks in VS Code - Automate Workflows with Lifecycle Events
+# Lab 02: Agent Hooks in VS Code - Automate Workflows with Lifecycle Events
 
 > \[!NOTE\]  
 > This lab uses the **Agent Hooks** feature (Preview) in VS Code to execute custom shell commands at key lifecycle points during agent sessions. You will build hooks for the **Book Favorites** app (`copilot-agent-and-mcp/`).

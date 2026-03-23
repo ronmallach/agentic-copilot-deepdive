@@ -1,4 +1,4 @@
-# Lab: Custom Instructions in VS Code - Define Coding Standards for AI
+# Lab 00: Custom Instructions in VS Code - Define Coding Standards for AI
 
 > \[!NOTE\]  
 > This lab uses the **Custom Instructions** feature in VS Code to define coding standards, conventions, and guidelines that GitHub Copilot follows automatically. You will configure instructions for the **Book Favorites** app.

@@ -1,4 +1,4 @@
-# Lab: Agent Plugins in VS Code - Bundle and Share AI Customizations
+# Lab 04: Agent Plugins in VS Code - Bundle and Share AI Customizations
 
 > [!NOTE]  
 > This lab uses the **Agent Plugins** feature (Preview) in VS Code to package the customizations you built across Labs 00-03 into a single distributable plugin. You will bundle instructions, agents, hooks, and skills for the **Book Favorites** app (`copilot-agent-and-mcp/`).

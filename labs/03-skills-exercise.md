@@ -1,4 +1,4 @@
-# Lab: Agent Skills in VS Code - Build Reusable AI Capabilities
+# Lab 03: Agent Skills in VS Code - Build Reusable AI Capabilities
 
 > \[!NOTE\]  
 > This lab uses the **Agent Skills** feature in VS Code to create portable, reusable capabilities that GitHub Copilot loads on demand. You will build skills for the **Book Favorites** app (`copilot-agent-and-mcp/`).

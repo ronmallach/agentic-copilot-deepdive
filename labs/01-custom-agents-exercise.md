@@ -1,4 +1,4 @@
-# Lab: Custom Agents in VS Code - Build Specialized AI Personas
+# Lab 01: Custom Agents in VS Code - Build Specialized AI Personas
 
 > \[NOTE\]   
 > This lab uses the **Custom Agents** feature in VS Code to create specialized AI personas tailored to specific development tasks. You will build agents for the **Book Favorites** app.

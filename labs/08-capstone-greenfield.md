@@ -1,4 +1,4 @@
-# Lab 09 - Greenfield Capstone: Build a Feature Flag Service from Scratch
+# Lab 08 - Greenfield Capstone: Build a Feature Flag Service from Scratch
 
 > **Mode:** VS Code (Agent Mode)
 > **Duration:** 60 minutes
