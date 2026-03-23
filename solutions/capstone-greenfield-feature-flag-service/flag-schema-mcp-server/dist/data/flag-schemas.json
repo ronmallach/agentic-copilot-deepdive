@@ -1,0 +1,87 @@
+{
+  "flagSchema": {
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier, auto-generated"
+    },
+    "name": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+$",
+      "description": "Unique kebab-case flag name"
+    },
+    "description": {
+      "type": "string",
+      "maxLength": 200,
+      "description": "Human-readable purpose of the flag"
+    },
+    "enabled": {
+      "type": "boolean",
+      "default": false,
+      "description": "Whether the flag is active"
+    },
+    "environment": {
+      "type": "string",
+      "enum": ["development", "staging", "production"],
+      "description": "Target environment"
+    },
+    "createdBy": { "type": "string", "description": "Username of the creator" },
+    "updatedBy": {
+      "type": "string",
+      "description": "Username of last modifier"
+    },
+    "createdAt": {
+      "type": "string",
+      "format": "ISO 8601",
+      "description": "Creation timestamp"
+    },
+    "updatedAt": {
+      "type": "string",
+      "format": "ISO 8601",
+      "description": "Last update timestamp"
+    }
+  },
+  "auditLogSchema": {
+    "id": { "type": "string", "format": "uuid" },
+    "userId": { "type": "string" },
+    "action": {
+      "type": "string",
+      "enum": ["created", "updated", "deleted", "toggled"]
+    },
+    "flagName": { "type": "string" },
+    "changes": { "type": "object", "description": "Before/after values" },
+    "timestamp": { "type": "string", "format": "ISO 8601" }
+  },
+  "sampleFlags": [
+    {
+      "name": "dark-mode",
+      "description": "Enable dark mode UI",
+      "environment": "production",
+      "enabled": true
+    },
+    {
+      "name": "new-checkout-flow",
+      "description": "Redesigned checkout experience",
+      "environment": "staging",
+      "enabled": false
+    },
+    {
+      "name": "beta-search",
+      "description": "AI-powered search results",
+      "environment": "development",
+      "enabled": true
+    },
+    {
+      "name": "rate-limit-v2",
+      "description": "Upgraded rate limiting algorithm",
+      "environment": "production",
+      "enabled": false
+    },
+    {
+      "name": "user-analytics-dashboard",
+      "description": "Real-time user analytics panel",
+      "environment": "staging",
+      "enabled": true
+    }
+  ]
+}

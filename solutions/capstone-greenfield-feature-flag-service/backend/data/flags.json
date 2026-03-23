@@ -1,0 +1,123 @@
+[
+  {
+    "id": "1a2b3c4d-5e6f-7890-abcd-ef1234567890",
+    "name": "dark-mode",
+    "description": "Enable dark mode UI",
+    "enabled": true,
+    "environment": "production",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2024-01-15T10:30:00.000Z",
+    "updatedAt": "2024-01-15T10:30:00.000Z"
+  },
+  {
+    "id": "2b3c4d5e-6f78-9012-bcde-f23456789012",
+    "name": "new-checkout-flow",
+    "description": "Redesigned checkout experience",
+    "enabled": false,
+    "environment": "staging",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2024-01-16T14:45:00.000Z",
+    "updatedAt": "2024-01-16T14:45:00.000Z"
+  },
+  {
+    "id": "3c4d5e6f-7890-1234-cdef-345678901234",
+    "name": "beta-search",
+    "description": "AI-powered search results",
+    "enabled": true,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2024-01-17T09:15:00.000Z",
+    "updatedAt": "2024-01-17T09:15:00.000Z"
+  },
+  {
+    "id": "4d5e6f78-9012-3456-def0-456789012345",
+    "name": "rate-limit-v2",
+    "description": "Upgraded rate limiting algorithm",
+    "enabled": false,
+    "environment": "production",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2024-01-18T16:20:00.000Z",
+    "updatedAt": "2024-01-18T16:20:00.000Z"
+  },
+  {
+    "id": "5e6f7890-1234-5678-ef01-567890123456",
+    "name": "user-analytics-dashboard",
+    "description": "Real-time user analytics panel",
+    "enabled": true,
+    "environment": "staging",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2024-01-19T11:00:00.000Z",
+    "updatedAt": "2024-01-19T11:00:00.000Z"
+  },
+  {
+    "id": "2bbe7862-9900-4cbb-a6a9-4dc1a9f5641c",
+    "name": "test-flag",
+    "description": "A test flag",
+    "enabled": false,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:23:47.935Z",
+    "updatedAt": "2026-03-23T00:23:47.935Z"
+  },
+  {
+    "id": "94c49daa-a313-4530-b976-5e544b22b654",
+    "name": "duplicate-flag",
+    "description": "",
+    "enabled": false,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:23:48.013Z",
+    "updatedAt": "2026-03-23T00:23:48.013Z"
+  },
+  {
+    "id": "98a46702-d1b7-4962-87f2-44f69bd6f1bb",
+    "name": "update-test",
+    "description": "Updated description",
+    "enabled": true,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:23:48.053Z",
+    "updatedAt": "2026-03-23T00:23:48.082Z"
+  },
+  {
+    "id": "88c02911-1ef9-41a0-8140-5daff1c570ee",
+    "name": "delete-test",
+    "description": "Flag for delete tests",
+    "enabled": false,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:23:48.243Z",
+    "updatedAt": "2026-03-23T00:23:48.243Z"
+  },
+  {
+    "id": "d5758fda-4cb9-4129-92de-b9c4d591da91",
+    "name": "toggle-test",
+    "description": "Flag for toggle tests",
+    "enabled": true,
+    "environment": "development",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:23:48.315Z",
+    "updatedAt": "2026-03-23T00:23:48.354Z"
+  },
+  {
+    "id": "e26084df-f7b2-47c7-9c77-e1e0d87bf78b",
+    "name": "new-homepage",
+    "description": "Redesigned homepage",
+    "enabled": true,
+    "environment": "staging",
+    "createdBy": "admin",
+    "updatedBy": "admin",
+    "createdAt": "2026-03-23T00:51:42.351Z",
+    "updatedAt": "2026-03-23T00:51:49.977Z"
+  }
+]

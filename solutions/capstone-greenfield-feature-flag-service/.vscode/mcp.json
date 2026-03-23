@@ -1,0 +1,9 @@
+{
+  "servers": {
+    "flag-schema": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["flag-schema-mcp-server/dist/index.js"]
+    }
+  }
+}
