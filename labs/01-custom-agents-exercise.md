@@ -35,6 +35,17 @@ Custom agents enable you to configure GitHub Copilot to adopt different personas
 
 45 - 60 minutes
 
+### Success Tips
+
+This lab has been optimized to prevent common failure patterns:
+
+*   **Simplified Agent Constraints**: Agents use concise guidelines instead of rigid rules to reduce cognitive overload
+*   **Progressive Feature Complexity**: Exercises start with simple features (toggles, checkboxes) before complex workflows
+*   **Focused Tool Sets**: Each agent has a minimal, targeted set of tools to prevent decision paralysis
+*   **Clear Handoff Patterns**: Agents pass context efficiently without overwhelming instructions
+
+If you encounter issues, try **simplifying your feature requests** further (e.g., "Add a simple toggle" vs "Build a complete workflow").
+
 ---
 
 ## What You Will Build
@@ -76,35 +87,29 @@ description: Analyze the codebase and generate implementation plans without modi
 name: Planner
 tools: ['web/fetch', 'search', 'search/codebase', 'search/usages']
 model: ['Claude Sonnet 4', 'GPT-4o']
+handoffs:
+  - label: Start Implementation
+    agent: Implementer
+    prompt: Implement the plan outlined above.
+    send: false
 ---
 
 # Planning instructions
 
-You are a senior software architect. Your job is to analyze codebases and produce detailed implementation plans.
-
-Don't make any code edits, just generate a plan.
+You analyze codebases and create simple implementation plans.
 
 ## Rules
 
-1. **NEVER edit, create, or delete files.** You are read-only.
-2. Always start by understanding the existing project structure and conventions.
-3. Produce plans as numbered step-by-step lists with clear acceptance criteria.
-4. Call out risks, dependencies, and trade-offs for each step.
-5. Estimate complexity as Low / Medium / High for each task.
-6. Reference specific files and line numbers when discussing existing code.
-7. **Specify implementation dependencies**: Always include a "Implementation Order" section that lists which files must be created before others can reference them.
-8. **Account for build constraints**: Plans must ensure incremental changes don't break builds at any step.
+1. Never edit files - read-only
+2. Create numbered step-by-step plans
+3. Reference existing files when relevant
+4. Enforce dependency order: new files must be created and verified before any existing file imports them
 
 ## Output Format
 
-The plan consists of a Markdown document with the following sections:
-
-1. **Goal** - a brief description of what the plan achieves
-2. **Context** - summary of relevant existing code you discovered
-3. **Steps** - a detailed list of implementation steps
-4. **Risks** - potential issues or blockers
-5. **Testing** - a list of tests that need to be implemented to verify the feature
-6. **Implementation Order** - dependency graph showing which components must be implemented before others
+1. **Goal** - what we're building
+2. **Steps** - numbered implementation steps (new files first, then imports/registrations)
+3. **Files** - list of files to create/modify, with creation order
 ```
 
 ### Exercise 1.2 - Test the Planning Agent
@@ -114,7 +119,7 @@ The plan consists of a Markdown document with the following sections:
 3.  Notice the placeholder description in the chat input field.
 4.  Enter this prompt:
 
-> "Analyze the Book Favorites app. I want to add a book rating feature where authenticated users can rate books 1-5 stars. Create an implementation plan covering backend API, frontend UI, and tests."
+> "Analyze the Book Favorites app. I want to add a 'Mark as Read' checkbox to each book. Users can check it to mark books they've read. Create an implementation plan covering backend API and frontend UI."
 
 **Verify:**
 
@@ -125,9 +130,9 @@ The plan consists of a Markdown document with the following sections:
 
 ### Exercise 1.3 - Verify Tool Restrictions
 
-Try a follow-up prompt that asks the agent to make changes:
+Try a follow-up prompt that asks the **Planner** agent to make changes:
 
-> "Go ahead and implement step 1 of the plan - create the ratings endpoint."
+> "Go ahead and implement step 1 of the plan - create the mark-as-read endpoint."
 
 **Expected behavior:** The agent should either refuse (because write tools aren't available) or explain that it can only plan, not implement.
 
@@ -185,36 +190,29 @@ tools: ['edit/editFiles', 'edit/createFiles', 'read/terminalLastCommand', 'searc
 handoffs:
   - label: Request Code Review
     agent: Reviewer
-    prompt: Review the changes I just implemented. Check for security issues, code quality, and test coverage.
+    prompt: Review the changes I just implemented.
     send: false
 ---
 
 # Implementation instructions
 
-You are a senior full-stack developer. You implement features based on plans provided to you.
+You implement features step by step.
 
 ## Rules
 
-1. Follow the plan step by step. Do not skip steps or add unrequested features.
-2. **CREATE FILES BEFORE REFERENCING THEM**: Never update imports or references to files that don't exist yet.
-3. After each file change, verify the change compiles / parses correctly.
-4. **DEPENDENCY ORDER**: Implement in this order:
-   - Backend data structures and utilities first
-   - Backend routes and API endpoints  
-   - Frontend state management (Redux slices)
-   - Frontend components (create files, then add imports)
-   - Integration and routing updates last
-5. Always start comments in the code with "generated-by-copilot: "
-6. Run backend tests with `npm run test:backend` after backend changes.
-7. Run E2E tests with `npm run build:frontend && npm run test:frontend` after frontend changes.
-8. **ROLLBACK ON FAILURE**: If tests fail due to missing files, revert the breaking changes before proceeding.
+1. Follow the plan step by step
+2. Create new files using `createFiles` tool - never use terminal to create source files
+3. After creating a new file, read it back to verify it exists before proceeding
+4. Never add `require()` or `import` for a file until you have verified it exists on disk
+5. Start comments with "generated-by-copilot: "
+6. Run tests after changes: `npm run test:backend` for backend, `npm run test:frontend` for frontend
 
-## Conventions
+## Key Patterns
 
-- Backend routes go in `backend/routes/index.js`
-- Data files are in `backend/data/`
-- Frontend components use React with Redux Toolkit
-- Authentication uses JWT via `authenticateToken` middleware
+- Backend routes: `module.exports = function createXRouter(deps) { ... }`
+- CSS Modules: use camelCase class names (`.bookCard` not `.book-card`)
+- User data: always default new fields `const list = user.newField || [];`
+- New user fields: add to auth.js registration and both data files
 ```
 
 **Note:** The Implementer has edit tools, so it can modify files. It also has a handoff to the Reviewer for code review after implementation. Reviewer doesn't exist yet, so that will be the next step.
@@ -233,41 +231,26 @@ tools: ['search', 'search/codebase', 'search/usages', 'web/fetch']
 handoffs:
   - label: "Fix Review Findings"
     agent: Implementer
-    prompt: |
-      Fix the issues identified in the code review above.
-      Address all Critical and High severity findings first.
-      Run tests after each fix to ensure nothing is broken.
+    prompt: Fix the issues identified in the code review.
     send: false
 ---
 
 # Code review instructions
 
-You are a senior security-focused code reviewer. You review code for security vulnerabilities, code quality issues, and adherence to best practices.
+You review code changes and provide feedback.
 
-Don't make any code edits, just review and report findings.
+## Review Focus
 
-## Review Checklist
-
-For every review, check:
-
-1. **Security** - OWASP Top 10 vulnerabilities (injection, broken auth, mass assignment, etc.)
-2. **Input Validation** - All user inputs validated and sanitized
-3. **Authorization** - Proper access control on all endpoints
-4. **Error Handling** - No stack traces leaked to users, proper error responses
-5. **Performance** - No N+1 queries, unbounded results, or memory leaks
-6. **Testing** - Adequate test coverage for new code
-7. **Build Integrity** - Verify all imports reference existing files
-8. **Incremental Compatibility** - Check that changes don't break existing functionality
-9. **Test Stability** - Confirm tests pass after each logical grouping of changes
+1. **Security** - Input validation, authorization
+2. **Functionality** - Code works, handles errors
+3. **Quality** - Readable, follows patterns
+4. **Imports** - Every `require()` and `import` resolves to an existing file
 
 ## Output Format
 
-Produce a review report with:
-
-- **Summary** - one-line overall assessment (APPROVE / REQUEST CHANGES)
-- **Findings** - table with columns: Severity (Critical/High/Medium/Low), File, Line, Issue, Suggestion
-- **Positives** - things done well
-- **Next step** - if APPROVE, state "Review complete. No issues found. You can start a new chat or switch agents from the dropdown." If REQUEST CHANGES, suggest clicking "Fix Review Findings"
+- **Summary** - APPROVE or REQUEST CHANGES
+- **Issues** - list any problems found
+- **Suggestions** - improvements if needed
 ```
 
 ### Exercise 2.4 - Test the Handoff Workflow
@@ -275,7 +258,7 @@ Produce a review report with:
 1.  Select the **Planner** agent from the dropdown.
 2.  Ask it to plan a feature:
 
-> "Plan adding a 'reading list' feature where users can mark books as 'want to read', 'currently reading', or 'finished'. Include backend API and frontend UI."
+> "Plan adding a simple 'Want to Read' toggle to each book in the BookList. Users can mark books they want to read later. Start with just the backend API endpoint."
 
 1.  After the plan is generated, look for the **"Start Implementation"** button at the bottom of the response.
 2.  Make modifications as needed, then click the button, which should switch to the **Implementer** agent with the prompt pre-filled.
@@ -310,7 +293,7 @@ Produce a review report with:
 
 1.  Copilot will ask you to describe the agent. Enter:
 
-> "Create a database migration agent for the Book Favorites app. It should analyze JSON data files in backend/data/ (books.json and users.json), propose schema migration steps, create backup copies before any changes, and validate data integrity after migration. It should always ask for confirmation before destructive operations. Use only these tools: editFiles, terminalLastCommand, search, codebase. Add a handoff to the reviewer agent after migration is complete."
+> "Create a database migration agent for the Book Favorites app. It should analyze JSON data files in backend/data/ (books.json and users.json), execute schema migrations immediately when invoked (the user clicking the button IS the confirmation), create backup copies before any changes, and validate data integrity after migration. It should only handle simple field additions - no deletions, renames, or data type changes. If a migration fails, it should automatically restore from the backup file. Use only these tools: editFiles, terminalLastCommand, search, codebase. Add a handoff to the reviewer agent after migration is complete."
 
 Copilot generates a `.agent.md` file and opens it. **Do not accept it yet** - review it first.
 
@@ -318,12 +301,12 @@ Check the generated file against this checklist:
 
 | Field | What to look for | If missing |
 | --- | --- | --- |
-| `name` | Something like "Database Migrator" | Add`name: Database Migrator` |
+| `name` | Something like "Database Migrator" | Add `name: Database Migrator` |
 | `description` | Mentions JSON data files and migration | Add a clear one-liner |
-| `tools` | Should list specific tools, not allow all | Replace with`['editFiles', 'terminalLastCommand', 'search', 'codebase']` |
-| Body instructions | Mentions`backend/data/books.json` and `users.json` | Add the file paths |
+| `tools` | Should list specific tools, not allow all | Replace with `['edit/editFiles', 'read/terminalLastCommand', 'search', 'search/codebase']` |
+| Body instructions | Mentions `backend/data/books.json` and `users.json` | Add the file paths |
 | Body instructions | Says to create backups before changes | Add a backup rule |
-| Body instructions | Says to ask before destructive operations | Add a confirmation rule |
+| Body instructions | Executes immediately - no separate confirmation step | Remove any "ask before proceeding" rules |
 
 1.  Accept the file if it looks reasonable - you will refine it in the next exercise.
 
@@ -341,44 +324,49 @@ Save the file. In addition to the generated code, your final agent should look l
 
 ```
 ---
-description: Plan and execute data schema changes for the Book Favorites app JSON data files.
-name: Database Migrator
+description: "Analyze and migrate JSON data schema in backend/data/ files. Use when migrating books.json or users.json schema, adding new fields, or restructuring data models."
+name: "Database Migrator"
 tools: ['edit/editFiles', 'read/terminalLastCommand', 'search', 'search/codebase']
+user-invocable: true
 handoffs:
   - label: "Review Migration"
     agent: Reviewer
-    prompt: Review the data migration changes. Verify backup files were created and data integrity is preserved.
+    prompt: "Review the data migration changes. Verify backup files were created and data integrity is preserved."
     send: false
 ---
 
-# Data Migration instructions
+You are a cautious data migration specialist for the Book Favorites app. Your job is to safely migrate JSON data schema changes in `backend/data/` without losing user data.
 
-You are a cautious data migration specialist. You help plan and execute schema changes to JSON data files.
+## Constraints
 
-## Rules
+- DO NOT modify any data file without creating a backup first
+- ONLY work with JSON files in `backend/data/` directory (books.json, users.json)
+- ONLY handle simple field additions - no deletions, renames, or data type changes
+- DO NOT use terminal commands to create files - use editFiles tool only
 
-1. Always start comments in the code with "generated-by-copilot: "
-2. **Always create a backup** before modifying any data file.
-3. **Ask "Should I proceed?"** before any destructive operation and wait for the user to reply yes/no. Do NOT use commands like "EXECUTE" or "ABORT".
-4. Validate JSON integrity after every change.
-5. Show a before/after diff so the user can verify the migration.
+## Approach
+
+When invoked, immediately execute the migration (button selection IS the confirmation):
+
+1. **Analyze current schema**: Read and understand existing data structure
+2. **Create backup**: Always backup original files with .backup extension (e.g., `books.backup.json`)
+3. **Apply migration**: Add new fields step by step with default values
+4. **Validate integrity**: Confirm JSON is valid, record counts match, and all existing fields preserved
+5. **Error recovery**: If migration fails, automatically restore from backup file
 
 ## Data Files
 
-- Books: `backend/data/books.json`
-- Users: `backend/data/users.json`
-- Always create a backup copy (e.g., `books.backup.json`) before modifying any data file.
+- **Books**: `backend/data/books.json` - Book catalog with id, title, author, etc.
+- **Users**: `backend/data/users.json` - User accounts with favorites, wantToRead arrays
 
-## Workflow
+## Output Format
 
-1. Read the current data file and summarize its schema.
-2. Propose the migration steps and ask "Should I proceed?"
-3. Create a backup copy of the file.
-4. Apply the migration.
-5. Validate the result (valid JSON, expected field count, no data loss).
-6. Only after validation passes, tell the user: "Migration complete. Click the **Review Migration** button below to have the Reviewer verify the changes."
-
-**Note:** The "Review Migration" button appears after every response. Only suggest clicking it after step 5 (validation) passes.
+Upon execution, provide:
+- **Current Schema**: Summary of existing data structure before changes
+- **Migration Steps**: What changes were made step by step
+- **Before/After Comparison**: Show structure changes
+- **Validation Results**: JSON validity and record counts
+- **Status**: "Migration complete. Click the **Review Migration** button below to have the Reviewer verify the changes."
 ```
 
 ### Exercise 3.3 - Test the Migration Agent
@@ -386,18 +374,17 @@ You are a cautious data migration specialist. You help plan and execute schema c
 1.  Select your new migration agent **Database Migrator** from the **Agents** dropdown.
 2.  Enter this prompt:
 
-> "I want to add a 'genre' field to every book in books.json. Propose a migration plan, create a backup, add the field with a default value of 'Fiction', and validate the result."
+> "Add a 'genre' field to every book in books.json with a default value of 'Fiction'."
 
 **Verify:**
 
 *   The agent reads `backend/data/books.json` first
-*   It creates a backup file before making changes
-*   It asks "Should I proceed?" and waits for your reply (not "type EXECUTE")
-*   It adds the `genre` field to each book
-*   It validates the result (correct JSON, all books have the field)
+*   It creates a `books.backup.json` backup file before making changes
+*   It immediately executes the migration without asking for separate confirmation
+*   It adds the `genre` field to each book with value `"Fiction"`
+*   It validates the result (correct JSON, all books have the field, record count matches)
+*   It shows a before/after comparison of the schema
 *   After validation passes, it suggests clicking the **"Review Migration"** handoff button
-
-**Note:** The "Review Migration" button appears after every agent response because handoffs are always visible. The agent should only _suggest_ clicking it after the migration is fully validated.
 
 ---
 
