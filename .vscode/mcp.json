@@ -5,8 +5,13 @@
     "book-database": {
       "command": "node",
       "args": [
-        "/path-to/github-copilot-agent/book-database/build/index.js"
+        "/Users/ronmallach/Code/agentic-copilot-deepdive/solutions/book-database-mcp-server/dist/index.js"
       ]
+    },
+    "context7": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@upstash/context7-mcp@latest"]
     }
   }
 }

@@ -7,9 +7,12 @@ const path = require('path');
 
 const app = express();
 const PORT = 4000;
-const SECRET_KEY = 'your_jwt_secret';
+// generated-by-copilot: never hardcode secrets — read from environment
+const SECRET_KEY = process.env.SECRET_KEY || 'dev_only_secret_change_in_production';
 
-app.use(cors());
+// generated-by-copilot: restrict CORS to known frontend origin, never use wildcard in production
+const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
+app.use(cors({ origin: allowedOrigin }));
 app.use(bodyParser.json());
 
 
@@ -20,6 +23,9 @@ const booksFile = isTest
 const usersFile = isTest
   ? path.join(__dirname, 'data', 'test-users.json')
   : path.join(__dirname, 'data', 'users.json');
+const reviewsFile = isTest
+  ? path.join(__dirname, 'data', 'test-reviews.json')
+  : path.join(__dirname, 'data', 'reviews.json');
 
 // Helper functions
 function readJSON(file) {
@@ -48,6 +54,7 @@ const createApiRouter = require('./routes');
 app.use('/api', createApiRouter({
   usersFile,
   booksFile,
+  reviewsFile,
   readJSON,
   writeJSON,
   authenticateToken,

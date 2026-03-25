@@ -2,8 +2,11 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchBooks } from '../store/booksSlice';
-import { addFavorite, fetchFavorites } from '../store/favoritesSlice';
+import { addFavorite, removeFavorite, fetchFavorites } from '../store/favoritesSlice';
 import { useNavigate } from 'react-router-dom';
+
+import ReadingListDropdown from './ReadingListDropdown';
+
 import styles from '../styles/BookList.module.css';
 
 const BookList = () => {
@@ -23,13 +26,26 @@ const BookList = () => {
     dispatch(fetchFavorites(token));
   }, [dispatch, token, navigate]);
 
-  const handleAddFavorite = async (bookId) => {
+  const handleToggleFavorite = async (bookId, isFavorite) => {
     if (!token) {
       navigate('/');
       return;
     }
-    await dispatch(addFavorite({ token, bookId }));
-    dispatch(fetchFavorites(token));
+    if (isFavorite) {
+      await dispatch(removeFavorite({ token, bookId }));
+    } else {
+      await dispatch(addFavorite({ token, bookId }));
+      dispatch(fetchFavorites(token));
+    }
+  };
+
+  const handleAddToReadingList = (bookId, listName) => {
+    if (!token) {
+      navigate('/');
+      return;
+    }
+    // generated-by-copilot: placeholder until reading-list API route is added
+    console.log(`Add book ${bookId} to "${listName}"`);
   };
 
   if (status === 'loading') return <div>Loading...</div>;
@@ -69,10 +85,11 @@ const BookList = () => {
                 <div className={styles.bookAuthor}>by {book.author}</div>
                 <button
                   className={styles.simpleBtn}
-                  onClick={() => handleAddFavorite(book.id)}
+                  onClick={() => handleToggleFavorite(book.id, isFavorite)}
                 >
-                  {isFavorite ? 'In Favorites' : 'Add to Favorites'}
+                  {isFavorite ? 'Remove Favorite' : 'Add to Favorites'}
                 </button>
+                <ReadingListDropdown bookId={book.id} onAdd={handleAddToReadingList} />
               </div>
             );
           })}

@@ -1,7 +1,9 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
-import { fetchFavorites } from '../store/favoritesSlice';
+import { fetchFavorites, removeFavorite } from '../store/favoritesSlice';
 import { useNavigate } from 'react-router-dom';
+
+import styles from '../styles/Favorites.module.css';
 
 const Favorites = () => {
   const dispatch = useAppDispatch();
@@ -17,6 +19,14 @@ const Favorites = () => {
     }
     dispatch(fetchFavorites(token));
   }, [dispatch, token, navigate]);
+
+  const handleRemove = (bookId) => {
+    if (!token) {
+      navigate('/');
+      return;
+    }
+    dispatch(removeFavorite({ token, bookId }));
+  };
 
   if (status === 'loading') return <div>Loading...</div>;
   if (status === 'failed') return <div>Failed to load favorites.</div>;
@@ -41,13 +51,20 @@ const Favorites = () => {
           </p>
         </div>
       ) : (
-        <ul>
+        <div className={styles.favoritesGrid}>
           {favorites.map(book => (
-            <li key={book.id}>
-              <strong>{book.title}</strong> by {book.author}
-            </li>
+            <div className={styles.favoriteCard} key={book.id}>
+              <div className={styles.bookTitle}>{book.title}</div>
+              <div className={styles.bookAuthor}>by {book.author}</div>
+              <button
+                className={styles.removeBtn}
+                onClick={() => handleRemove(book.id)}
+              >
+                Remove
+              </button>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );

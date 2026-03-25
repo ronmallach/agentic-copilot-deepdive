@@ -1,6 +1,23 @@
 .bookCardWithHeart {
   position: relative;
 }
+
+.readingListDropdown {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-top: 0.5rem;
+}
+
+.readingListSelect {
+  width: 100%;
+  padding: 0.35rem 0.5rem;
+  font-size: 0.95rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
+  cursor: pointer;
+}
 .favoriteHeart {
   position: absolute;
   top: 10px;

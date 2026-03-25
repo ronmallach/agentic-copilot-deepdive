@@ -3,8 +3,6 @@
     "username": "user1",
     "password": "user1",
     "favorites": [
-      "1",
-      "2",
       "7",
       "15",
       "9",
@@ -13,7 +11,11 @@
       "16",
       "14",
       "20",
-      "21"
+      "21",
+      "3",
+      "44",
+      "8",
+      "26"
     ]
   },
   {
@@ -21,6 +23,20 @@
     "password": "e2epass904",
     "favorites": [
       "1"
+    ]
+  },
+  {
+    "username": "e2euser880",
+    "password": "e2epass920",
+    "favorites": [
+      "1"
+    ]
+  },
+  {
+    "username": "user2",
+    "password": "user2",
+    "favorites": [
+      "4"
     ]
   }
 ]

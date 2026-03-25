@@ -25,6 +25,19 @@ function createFavoritesRouter({ usersFile, booksFile, readJSON, writeJSON, auth
     res.status(200).json({ message: 'Book added to favorites' });
   });
 
+  // generated-by-copilot: DELETE /favorites/:bookId - remove a book from the user's favorites
+  router.delete('/:bookId', authenticateToken, (req, res) => {
+    const { bookId } = req.params;
+    const users = readJSON(usersFile);
+    const user = users.find(u => u.username === req.user.username);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    const index = user.favorites.indexOf(bookId);
+    if (index === -1) return res.status(404).json({ error: 'Book not in favorites' });
+    user.favorites.splice(index, 1);
+    writeJSON(usersFile, users);
+    res.status(200).json({ message: 'Book removed from favorites' });
+  });
+
   return router;
 }
 
