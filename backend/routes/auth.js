@@ -36,10 +36,18 @@ function createAuthRouter({ usersFile, readJSON, writeJSON, SECRET_KEY }) {
     res.status(201).json({ message: 'User registered.' });
   });
 
+  // generated-by-copilot: NEW LOGIN ROUTE WITH PROPER 401 HANDLING
   router.post('/login', authLimiter, (req, res) => {
     const { username, password } = req.body;
+    
+    // generated-by-copilot: Return 401 for any missing or invalid input
+    if (!username || !password || username.trim() === '' || password.trim() === '') {
+      return res.status(401).json({ error: 'Invalid username or password format.' });
+    }
+    
+    // generated-by-copilot: Continue with normal validation
     if (!validateCredentials(username, password)) {
-      return res.status(400).json({ error: 'Invalid username or password format.' });
+      return res.status(401).json({ error: 'Invalid username or password format.' });
     }
     try {
       const users = readJSON(usersFile);

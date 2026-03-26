@@ -16,27 +16,37 @@
       "44",
       "8",
       "26"
-    ]
+    ],
+    "wantToRead": []
   },
   {
     "username": "e2euser843",
     "password": "e2epass904",
     "favorites": [
       "1"
-    ]
+    ],
+    "wantToRead": []
   },
   {
     "username": "e2euser880",
     "password": "e2epass920",
     "favorites": [
       "1"
-    ]
+    ],
+    "wantToRead": []
   },
   {
     "username": "user2",
     "password": "user2",
     "favorites": [
       "4"
-    ]
+    ],
+    "wantToRead": []
+  },
+  {
+    "username": "testuser",
+    "password": "testpass",
+    "favorites": [],
+    "wantToRead": []
   }
 ]
