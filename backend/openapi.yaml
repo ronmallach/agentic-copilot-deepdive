@@ -1,0 +1,880 @@
+openapi: 3.0.3
+info:
+  title: Book Favorites API
+  description: A REST API for managing book collections, user favorites, reading lists, and reviews
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@bookfavorites.com
+
+servers:
+  - url: http://localhost:4000/api/v1
+    description: Development server
+  - url: http://localhost:4000/api
+    description: Development server (legacy, redirects to v1)
+
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: JWT token obtained from /api/v1/auth/login
+
+  schemas:
+    User:
+      type: object
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: "john_doe"
+        favorites:
+          type: array
+          items:
+            type: string
+          example: ["1", "2", "3"]
+        wantToRead:
+          type: array
+          items:
+            type: string
+          example: ["4", "5"]
+
+    Book:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        title:
+          type: string
+          example: "To Kill a Mockingbird"
+        author:
+          type: string
+          example: "Harper Lee"
+        genre:
+          type: string
+          example: "Fiction"
+
+    Review:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1774478036832"
+        bookId:
+          type: string
+          example: "1"
+        username:
+          type: string
+          example: "user1"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        comment:
+          type: string
+          example: "A masterpiece"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-03-25T22:33:56.832Z"
+
+    BookStats:
+      type: object
+      properties:
+        totalBooks:
+          type: integer
+          example: 50
+        favoritedBooks:
+          type: integer
+          example: 25
+
+    LoginRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          example: "john_doe"
+        password:
+          type: string
+          format: password
+          example: "password123"
+
+    RegisterRequest:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+          minLength: 1
+          maxLength: 50
+          example: "john_doe"
+        password:
+          type: string
+          minLength: 1
+          maxLength: 72
+          format: password
+          example: "password123"
+
+    AuthResponse:
+      type: object
+      properties:
+        token:
+          type: string
+          example: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+
+    CreateReviewRequest:
+      type: object
+      required:
+        - bookId
+        - rating
+      properties:
+        bookId:
+          type: string
+          example: "1"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          example: 5
+        comment:
+          type: string
+          example: "A masterpiece"
+
+    AddFavoriteRequest:
+      type: object
+      required:
+        - bookId
+      properties:
+        bookId:
+          type: string
+          example: "1"
+
+    AddWantToReadRequest:
+      type: object
+      required:
+        - bookId
+      properties:
+        bookId:
+          type: string
+          example: "1"
+
+    SuccessMessage:
+      type: object
+      properties:
+        message:
+          type: string
+          example: "Operation completed successfully"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: object
+          properties:
+            code:
+              type: string
+              example: "VALIDATION_ERROR"
+            message:
+              type: string
+              example: "Invalid input data"
+
+    Pagination:
+      type: object
+      properties:
+        page:
+          type: integer
+          example: 1
+        limit:
+          type: integer
+          example: 10
+        total:
+          type: integer
+          example: 50
+        pages:
+          type: integer
+          example: 5
+
+    Links:
+      type: object
+      properties:
+        self:
+          type: string
+          example: "/api/v1/books?page=1&limit=10"
+        next:
+          type: string
+          nullable: true
+          example: "/api/v1/books?page=2&limit=10"
+        prev:
+          type: string
+          nullable: true
+          example: ""
+
+    PaginatedBooksResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        links:
+          $ref: '#/components/schemas/Links'
+
+    SearchResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Book'
+        pagination:
+          $ref: '#/components/schemas/Pagination'
+        query:
+          type: string
+          example: "mockingbird"
+
+paths:
+  /auth/register:
+    post:
+      summary: Register a new user
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequest'
+      responses:
+        '201':
+          description: User successfully registered
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  value:
+                    error:
+                      code: "VALIDATION_ERROR"
+                      message: "Invalid username or password format."
+        '409':
+          description: User already exists
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_exists:
+                  value:
+                    error:
+                      code: "USER_EXISTS"
+                      message: "User already exists."
+        '429':
+          description: Rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+              description: Request limit per window
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+              description: Remaining requests in current window
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /auth/login:
+    post:
+      summary: Authenticate user and get JWT token
+      tags:
+        - Authentication
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '401':
+          description: Invalid credentials or missing input
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                invalid_input:
+                  value:
+                    error:
+                      code: "INVALID_INPUT"
+                      message: "Username and password are required."
+                invalid_credentials:
+                  value:
+                    error:
+                      code: "INVALID_CREDENTIALS"
+                      message: "Invalid username or password."
+        '429':
+          description: Rate limit exceeded
+          headers:
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /books:
+    get:
+      summary: Get all books with pagination, filtering, and sorting
+      tags:
+        - Books
+      parameters:
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+          description: Page number
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+          description: Number of items per page
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: [title, author, genre]
+            default: title
+          description: Sort field
+        - name: order
+          in: query
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+          description: Sort order
+        - name: genre
+          in: query
+          schema:
+            type: string
+          description: Filter by genre (case-insensitive contains)
+        - name: author
+          in: query
+          schema:
+            type: string
+          description: Filter by author (case-insensitive contains)
+      responses:
+        '200':
+          description: Paginated list of books
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedBooksResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /books/search:
+    get:
+      summary: Search books by title
+      tags:
+        - Books
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+          description: Search query for title (case-insensitive contains)
+        - name: page
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+      responses:
+        '200':
+          description: Search results with pagination
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Missing or invalid search query
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                missing_query:
+                  value:
+                    error:
+                      code: "VALIDATION_ERROR"
+                      message: "Query parameter \"q\" is required"
+
+  /books/stats:
+    get:
+      summary: Get book statistics
+      tags:
+        - Books
+      responses:
+        '200':
+          description: Book statistics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BookStats'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /favorites:
+    get:
+      summary: Get user's favorite books
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of user's favorite books
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_not_found:
+                  value:
+                    error:
+                      code: "USER_NOT_FOUND"
+                      message: "User not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Add book to user's favorites
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddFavoriteRequest'
+      responses:
+        '201':
+          description: Book added to favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Invalid book ID or book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  value:
+                    error:
+                      code: "VALIDATION_ERROR"
+                      message: "Book ID is required"
+                book_not_found:
+                  value:
+                    error:
+                      code: "BOOK_NOT_FOUND"
+                      message: "Book not found"
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /favorites/{bookId}:
+    delete:
+      summary: Remove book from user's favorites
+      tags:
+        - Favorites
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the book to remove
+      responses:
+        '204':
+          description: Book removed from favorites
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found or book not in favorites
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_not_found:
+                  value:
+                    error:
+                      code: "USER_NOT_FOUND"
+                      message: "User not found"
+                book_not_in_favorites:
+                  value:
+                    error:
+                      code: "BOOK_NOT_IN_FAVORITES"
+                      message: "Book not in favorites"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /reviews/{bookId}:
+    get:
+      summary: Get all reviews for a specific book
+      tags:
+        - Reviews
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the book
+      responses:
+        '200':
+          description: List of reviews for the book
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Review'
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                book_not_found:
+                  value:
+                    error:
+                      code: "BOOK_NOT_FOUND"
+                      message: "Book not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /reviews:
+    post:
+      summary: Create a new review for a book
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReviewRequest'
+      responses:
+        '201':
+          description: Review created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Review'
+        '400':
+          description: Invalid input data
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  value:
+                    error:
+                      code: "VALIDATION_ERROR"
+                      message: "bookId and rating are required"
+        '401':
+          description: Authentication required
+        '404':
+          description: Book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /reviews/{reviewId}:
+    delete:
+      summary: Delete own review
+      tags:
+        - Reviews
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: reviewId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the review to delete
+      responses:
+        '204':
+          description: Review deleted successfully
+        '401':
+          description: Authentication required
+        '403':
+          description: Not authorized to delete this review
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                forbidden:
+                  value:
+                    error:
+                      code: "FORBIDDEN"
+                      message: "Not authorized to delete this review"
+        '404':
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                review_not_found:
+                  value:
+                    error:
+                      code: "REVIEW_NOT_FOUND"
+                      message: "Review not found"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /want-to-read:
+    get:
+      summary: Get user's want-to-read list
+      tags:
+        - Want to Read
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: List of books in user's want-to-read list
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Book'
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+    post:
+      summary: Add book to want-to-read list
+      tags:
+        - Want to Read
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddWantToReadRequest'
+      responses:
+        '201':
+          description: Book added to want-to-read list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuccessMessage'
+        '400':
+          description: Invalid book ID or book not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                validation_error:
+                  value:
+                    error:
+                      code: "VALIDATION_ERROR"
+                      message: "Valid Book ID is required"
+                book_not_found:
+                  value:
+                    error:
+                      code: "BOOK_NOT_FOUND"
+                      message: "Book not found"
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /want-to-read/{bookId}:
+    delete:
+      summary: Remove book from want-to-read list
+      tags:
+        - Want to Read
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: bookId
+          in: path
+          required: true
+          schema:
+            type: string
+          description: ID of the book to remove
+      responses:
+        '204':
+          description: Book removed from want-to-read list
+        '401':
+          description: Authentication required
+        '404':
+          description: User not found or book not in want-to-read list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+              examples:
+                user_not_found:
+                  value:
+                    error:
+                      code: "USER_NOT_FOUND"
+                      message: "User not found"
+                book_not_in_list:
+                  value:
+                    error:
+                      code: "BOOK_NOT_IN_LIST"
+                      message: "Book not in want-to-read list"
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+tags:
+  - name: Authentication
+    description: User authentication and registration
+  - name: Books
+    description: Book catalog operations with pagination, sorting, and filtering
+  - name: Favorites
+    description: User favorite books management
+  - name: Reviews
+    description: Book review operations
+  - name: Want to Read
+    description: User reading list management

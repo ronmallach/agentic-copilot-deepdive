@@ -1,7 +1,7 @@
 ---
 description: Execute implementation tasks following validated plans.
 name: FB Implementer
-tools: ['edit/editFiles', 'read/terminalLastCommand', 'search', 'search/codebase']
+tools: ['edit/editFiles', 'edit/createFile', 'read/terminalLastCommand', 'search', 'search/codebase']
 user-invocable: false
 model: ['Claude Haiku 4.5 (copilot)', 'Gemini 3 Flash (Preview) (copilot)']
 ---

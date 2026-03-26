@@ -39,7 +39,10 @@
     "username": "user2",
     "password": "user2",
     "favorites": [
-      "4"
+      "4",
+      "2",
+      "3",
+      "12"
     ],
     "wantToRead": []
   },
@@ -48,5 +51,17 @@
     "password": "testpass",
     "favorites": [],
     "wantToRead": []
+  },
+  {
+    "username": "e2euser187",
+    "password": "e2epass774",
+    "favorites": [
+      "1"
+    ]
+  },
+  {
+    "username": "searchuser492",
+    "password": "searchpass536",
+    "favorites": []
   }
 ]

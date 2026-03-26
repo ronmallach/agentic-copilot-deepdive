@@ -5,7 +5,14 @@ tools: [read/readFile, azure-mcp/search, search, web/fetch]
 handoffs:
   - label: "Fix Review Findings"
     agent: Implementer
-    prompt: Fix the issues identified in the code review.
+    prompt: |
+      Fix the issues identified in the code review above.
+      Address all Critical and High severity findings.
+      Run tests after each fix to ensure nothing is broken.
+    send: false
+  - label: "Plan Next Feature"
+    agent: Planner
+    prompt: The previous feature is complete. What should we build next?
     send: false
 ---
 

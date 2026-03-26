@@ -1,0 +1,63 @@
+/* generated-by-copilot: styles for the BookStats stats page */
+.stats-page {
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 6rem 1.5rem 2rem;
+}
+
+.stats-heading {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #20b2aa;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.stats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+@media (min-width: 600px) {
+  .stats-grid {
+    flex-direction: row;
+  }
+}
+
+.stat-card {
+  flex: 1;
+  background: #fff;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  padding: 2rem 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.stat-value {
+  font-size: 3rem;
+  font-weight: 700;
+  color: #20b2aa;
+}
+
+.stat-label {
+  font-size: 1rem;
+  color: #555;
+  font-weight: 500;
+}
+
+.loading-message {
+  text-align: center;
+  color: #888;
+  margin-top: 2rem;
+}
+
+.error-message {
+  text-align: center;
+  color: #c0392b;
+  margin-top: 2rem;
+}

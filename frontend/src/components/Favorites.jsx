@@ -53,7 +53,7 @@ const Favorites = () => {
       ) : (
         <div className={styles.favoritesGrid}>
           {favorites.map(book => (
-            <div className={styles.favoriteCard} key={book.id}>
+            <div className={styles.favoriteCard} data-testid="favorite-item" key={book.id}>
               <div className={styles.bookTitle}>{book.title}</div>
               <div className={styles.bookAuthor}>by {book.author}</div>
               <button

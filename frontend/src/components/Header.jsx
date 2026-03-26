@@ -30,6 +30,23 @@ const Header = () => {
       boxSizing: 'border-box',
     }}>
       <span style={{ fontWeight: 700, fontSize: '1.3rem', letterSpacing: '1px' }}>Book Favorites</span>
+      {/* generated-by-copilot: always-visible stats nav link - public endpoint requires no auth */}
+      <a
+        id="stats-link"
+        href="/stats"
+        onClick={e => { e.preventDefault(); navigate('/stats'); }}
+        style={{
+          color: '#fff',
+          textDecoration: 'none',
+          fontWeight: 500,
+          padding: '0.3rem 0.8rem',
+          borderRadius: '4px',
+          transition: 'background 0.2s',
+          background: window.location.pathname === '/stats' ? 'rgba(255,255,255,0.18)' : 'none',
+        }}
+      >
+        Stats
+      </a>
       {username && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
           <nav style={{ display: 'flex', gap: '1rem' }}>
@@ -50,7 +67,24 @@ const Header = () => {
               Books
             </a>
             <a
+              data-testid="search-link"
+              href="/search"
+              onClick={e => { e.preventDefault(); navigate('/search'); }}
+              style={{
+                color: '#fff',
+                textDecoration: 'none',
+                fontWeight: 500,
+                padding: '0.3rem 0.8rem',
+                borderRadius: '4px',
+                transition: 'background 0.2s',
+                background: window.location.pathname === '/search' ? 'rgba(255,255,255,0.18)' : 'none',
+              }}
+            >
+              Search
+            </a>
+            <a
               id="favorites-link"
+              data-testid="favorites-link"
               href="/favorites"
               onClick={e => { e.preventDefault(); navigate('/favorites'); }}
               style={{
