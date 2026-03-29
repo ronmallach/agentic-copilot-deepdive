@@ -5,14 +5,21 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use('/api', createApiRouter({
-  usersFile: path.join(__dirname, '../data/test-users.json'),
-  booksFile: path.join(__dirname, '../data/test-books.json'),
-  readJSON: (file) => require('fs').existsSync(file) ? JSON.parse(require('fs').readFileSync(file, 'utf-8')) : [],
-  writeJSON: (file, data) => require('fs').writeFileSync(file, JSON.stringify(data, null, 2)),
-  authenticateToken: (req, res, next) => next(), // No auth for books
-  SECRET_KEY: 'test_secret',
-}));
+app.use(
+  '/api',
+  createApiRouter({
+    usersFile: path.join(__dirname, '../data/test-users.json'),
+    booksFile: path.join(__dirname, '../data/test-books.json'),
+    readJSON: (file) =>
+      require('fs').existsSync(file)
+        ? JSON.parse(require('fs').readFileSync(file, 'utf-8'))
+        : [],
+    writeJSON: (file, data) =>
+      require('fs').writeFileSync(file, JSON.stringify(data, null, 2)),
+    authenticateToken: (req, res, next) => next(), // No auth for books
+    SECRET_KEY: 'test_secret',
+  })
+);
 
 describe('Books API', () => {
   it('GET /api/books should return a list of books', async () => {
@@ -40,11 +47,19 @@ describe('Books API', () => {
     expect(res.body.favoritedBooks).toBeGreaterThanOrEqual(0);
     // generated-by-copilot: derive expected favoritedBooks from fixtures to catch regressions
     const fs = require('fs');
-    const booksFixture = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/test-books.json'), 'utf-8'));
-    const usersFixture = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/test-users.json'), 'utf-8'));
-    const bookIds = new Set(booksFixture.map(b => String(b.id)));
+    const booksFixture = JSON.parse(
+      fs.readFileSync(path.join(__dirname, '../data/test-books.json'), 'utf-8')
+    );
+    const usersFixture = JSON.parse(
+      fs.readFileSync(path.join(__dirname, '../data/test-users.json'), 'utf-8')
+    );
+    const bookIds = new Set(booksFixture.map((b) => String(b.id)));
     const expectedFavorited = new Set(
-      usersFixture.flatMap(u => (Array.isArray(u.favorites) ? u.favorites : []).filter(id => id != null && bookIds.has(String(id))))
+      usersFixture.flatMap((u) =>
+        (Array.isArray(u.favorites) ? u.favorites : []).filter(
+          (id) => id != null && bookIds.has(String(id))
+        )
+      )
     ).size;
     expect(res.body.favoritedBooks).toBe(expectedFavorited);
   });
@@ -60,8 +75,8 @@ describe('Books API', () => {
         expect.arrayContaining([
           expect.objectContaining({
             title: expect.stringContaining('Mockingbird'),
-            author: 'Harper Lee'
-          })
+            author: 'Harper Lee',
+          }),
         ])
       );
     });
@@ -76,8 +91,8 @@ describe('Books API', () => {
         expect.arrayContaining([
           expect.objectContaining({
             title: '1984',
-            author: expect.stringContaining('Orwell')
-          })
+            author: expect.stringContaining('Orwell'),
+          }),
         ])
       );
     });
@@ -89,8 +104,8 @@ describe('Books API', () => {
         expect.arrayContaining([
           expect.objectContaining({
             title: expect.stringContaining('Great'),
-            author: 'F. Scott Fitzgerald'
-          })
+            author: 'F. Scott Fitzgerald',
+          }),
         ])
       );
     });
@@ -102,14 +117,16 @@ describe('Books API', () => {
         expect.arrayContaining([
           expect.objectContaining({
             title: 'Pride and Prejudice',
-            author: expect.stringContaining('Jane')
-          })
+            author: expect.stringContaining('Jane'),
+          }),
         ])
       );
     });
 
     it('should return paginated search results', async () => {
-      const res = await request(app).get('/api/books/search?q=fiction&limit=2&page=1');
+      const res = await request(app).get(
+        '/api/books/search?q=fiction&limit=2&page=1'
+      );
       expect(res.statusCode).toBe(200);
       expect(res.body.pagination.limit).toBe(2);
       expect(res.body.pagination.page).toBe(1);

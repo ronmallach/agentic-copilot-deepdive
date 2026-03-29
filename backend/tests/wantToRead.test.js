@@ -16,24 +16,29 @@ function getToken(username = 'user1') {
 
 const app = express();
 app.use(express.json());
-app.use('/api', createApiRouter({
-  usersFile,
-  booksFile,
-  readJSON: (file) => fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : [],
-  writeJSON: (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2)),
-  authenticateToken: (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.sendStatus(401);
-    try {
-      req.user = jwt.verify(token, SECRET_KEY);
-      next();
-    } catch {
-      return res.sendStatus(403);
-    }
-  },
-  SECRET_KEY,
-}));
+app.use(
+  '/api',
+  createApiRouter({
+    usersFile,
+    booksFile,
+    readJSON: (file) =>
+      fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : [],
+    writeJSON: (file, data) =>
+      fs.writeFileSync(file, JSON.stringify(data, null, 2)),
+    authenticateToken: (req, res, next) => {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1];
+      if (!token) return res.sendStatus(401);
+      try {
+        req.user = jwt.verify(token, SECRET_KEY);
+        next();
+      } catch {
+        return res.sendStatus(403);
+      }
+    },
+    SECRET_KEY,
+  })
+);
 
 describe('Want-to-Read API', () => {
   it('GET /api/want-to-read should fail without auth', async () => {
@@ -64,11 +69,11 @@ describe('Want-to-Read API', () => {
     // generated-by-copilot: Pick a book not already in want-to-read list
     const books = JSON.parse(fs.readFileSync(booksFile, 'utf-8'));
     const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-    const user1 = users.find(u => u.username === 'user1');
+    const user1 = users.find((u) => u.username === 'user1');
     const wantToReadList = user1.wantToRead || [];
-    const notInList = books.find(b => !wantToReadList.includes(b.id));
+    const notInList = books.find((b) => !wantToReadList.includes(b.id));
     if (!notInList) return; // generated-by-copilot: skip if all are in want-to-read list
-    
+
     const res = await request(app)
       .post('/api/want-to-read')
       .set('Authorization', `Bearer ${token}`)
@@ -85,7 +90,7 @@ describe('Want-to-Read API', () => {
       .set('Authorization', `Bearer ${token}`)
       .send({ bookId: '1' });
     expect(res1.statusCode).toBe(200);
-    
+
     // generated-by-copilot: Try to add the same book again
     const res2 = await request(app)
       .post('/api/want-to-read')
@@ -149,7 +154,7 @@ describe('Want-to-Read API', () => {
       .post('/api/want-to-read')
       .set('Authorization', `Bearer ${token}`)
       .send({ bookId: '2' });
-    
+
     // generated-by-copilot: Then remove it
     const res = await request(app)
       .delete('/api/want-to-read/2')

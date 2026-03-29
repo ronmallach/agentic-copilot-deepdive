@@ -1,9 +1,21 @@
 ---
 description: Execute implementation tasks following validated plans.
 name: FB Implementer
-tools: ['edit/editFiles', 'edit/createFile', 'read/terminalLastCommand', 'search', 'search/codebase']
-user-invocable: false
+tools:
+  [
+    'edit/editFiles',
+    'edit/createFile',
+    'read/terminalLastCommand',
+    'search',
+    'search/codebase',
+  ]
+user-invocable: true
 model: ['Claude Haiku 4.5 (copilot)', 'Gemini 3 Flash (Preview) (copilot)']
+hooks:
+  PreToolUse:
+    - type: command
+      command: .github/hooks/scripts/block-data-edits.js
+      timeout: 10
 ---
 
 # Implementation Instructions

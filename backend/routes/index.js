@@ -15,7 +15,7 @@ function createApiRouter(deps) {
   v1Router.use('/favorites', createFavoritesRouter(deps));
   v1Router.use('/reviews', createReviewsRouter(deps));
   v1Router.use('/want-to-read', createWantToReadRouter(deps));
-  
+
   router.use('/v1', v1Router);
   // generated-by-copilot: redirect root /api to versioned endpoint
   router.use('/', v1Router);

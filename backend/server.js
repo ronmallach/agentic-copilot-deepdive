@@ -8,13 +8,13 @@ const path = require('path');
 const app = express();
 const PORT = 4000;
 // generated-by-copilot: never hardcode secrets — read from environment
-const SECRET_KEY = process.env.SECRET_KEY || 'dev_only_secret_change_in_production';
+const SECRET_KEY =
+  process.env.SECRET_KEY || 'dev_only_secret_change_in_production';
 
 // generated-by-copilot: restrict CORS to known frontend origin, never use wildcard in production
 const allowedOrigin = process.env.ALLOWED_ORIGIN || 'http://localhost:5173';
 app.use(cors({ origin: allowedOrigin }));
 app.use(bodyParser.json());
-
 
 const isTest = process.env.TEST_MODE === '1';
 const booksFile = isTest
@@ -47,19 +47,20 @@ function authenticateToken(req, res, next) {
   });
 }
 
-
-
 // Use central API router
 const createApiRouter = require('./routes');
-app.use('/api', createApiRouter({
-  usersFile,
-  booksFile,
-  reviewsFile,
-  readJSON,
-  writeJSON,
-  authenticateToken,
-  SECRET_KEY
-}));
+app.use(
+  '/api',
+  createApiRouter({
+    usersFile,
+    booksFile,
+    reviewsFile,
+    readJSON,
+    writeJSON,
+    authenticateToken,
+    SECRET_KEY,
+  })
+);
 
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);

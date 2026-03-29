@@ -5,14 +5,21 @@ const path = require('path');
 
 const app = express();
 app.use(express.json());
-app.use('/api', createApiRouter({
-  usersFile: path.join(__dirname, '../data/test-users.json'),
-  booksFile: path.join(__dirname, '../data/test-books.json'),
-  readJSON: (file) => require('fs').existsSync(file) ? JSON.parse(require('fs').readFileSync(file, 'utf-8')) : [],
-  writeJSON: (file, data) => require('fs').writeFileSync(file, JSON.stringify(data, null, 2)),
-  authenticateToken: (req, res, next) => next(),
-  SECRET_KEY: 'test_secret',
-}));
+app.use(
+  '/api',
+  createApiRouter({
+    usersFile: path.join(__dirname, '../data/test-users.json'),
+    booksFile: path.join(__dirname, '../data/test-books.json'),
+    readJSON: (file) =>
+      require('fs').existsSync(file)
+        ? JSON.parse(require('fs').readFileSync(file, 'utf-8'))
+        : [],
+    writeJSON: (file, data) =>
+      require('fs').writeFileSync(file, JSON.stringify(data, null, 2)),
+    authenticateToken: (req, res, next) => next(),
+    SECRET_KEY: 'test_secret',
+  })
+);
 
 describe('Auth API', () => {
   const testUser = { username: 'testuser', password: 'testpass' };
@@ -42,7 +49,9 @@ describe('Auth API', () => {
   });
 
   it('POST /api/login should fail with wrong password', async () => {
-    const res = await request(app).post('/api/login').send({ username: testUser.username, password: 'wrong' });
+    const res = await request(app)
+      .post('/api/login')
+      .send({ username: testUser.username, password: 'wrong' });
     expect(res.statusCode).toBe(401);
   });
 

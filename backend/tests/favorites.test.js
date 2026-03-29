@@ -16,24 +16,29 @@ function getToken(username = 'user1') {
 
 const app = express();
 app.use(express.json());
-app.use('/api', createApiRouter({
-  usersFile,
-  booksFile,
-  readJSON: (file) => fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : [],
-  writeJSON: (file, data) => fs.writeFileSync(file, JSON.stringify(data, null, 2)),
-  authenticateToken: (req, res, next) => {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) return res.sendStatus(401);
-    try {
-      req.user = jwt.verify(token, SECRET_KEY);
-      next();
-    } catch {
-      return res.sendStatus(403);
-    }
-  },
-  SECRET_KEY,
-}));
+app.use(
+  '/api',
+  createApiRouter({
+    usersFile,
+    booksFile,
+    readJSON: (file) =>
+      fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf-8')) : [],
+    writeJSON: (file, data) =>
+      fs.writeFileSync(file, JSON.stringify(data, null, 2)),
+    authenticateToken: (req, res, next) => {
+      const authHeader = req.headers['authorization'];
+      const token = authHeader && authHeader.split(' ')[1];
+      if (!token) return res.sendStatus(401);
+      try {
+        req.user = jwt.verify(token, SECRET_KEY);
+        next();
+      } catch {
+        return res.sendStatus(403);
+      }
+    },
+    SECRET_KEY,
+  })
+);
 
 describe('Favorites API', () => {
   it('GET /api/favorites should fail without auth', async () => {
@@ -63,8 +68,8 @@ describe('Favorites API', () => {
     // Pick a book not already in favorites
     const books = JSON.parse(fs.readFileSync(booksFile, 'utf-8'));
     const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-    const user1 = users.find(u => u.username === 'user1');
-    const notFav = books.find(b => !user1.favorites.includes(b.id));
+    const user1 = users.find((u) => u.username === 'user1');
+    const notFav = books.find((b) => !user1.favorites.includes(b.id));
     if (!notFav) return; // skip if all are favorites
     const res = await request(app)
       .post('/api/favorites')
@@ -77,7 +82,7 @@ describe('Favorites API', () => {
   it('POST /api/favorites should not duplicate favorites', async () => {
     const token = getToken('user1');
     const users = JSON.parse(fs.readFileSync(usersFile, 'utf-8'));
-    const user1 = users.find(u => u.username === 'user1');
+    const user1 = users.find((u) => u.username === 'user1');
     const alreadyFav = user1.favorites[0];
     const res = await request(app)
       .post('/api/favorites')
@@ -106,9 +111,7 @@ describe('Favorites API', () => {
   });
 
   it('POST /api/favorites should fail without auth', async () => {
-    const res = await request(app)
-      .post('/api/favorites')
-      .send({ bookId: '1' });
+    const res = await request(app).post('/api/favorites').send({ bookId: '1' });
     expect(res.statusCode).toBe(401);
   });
 });
