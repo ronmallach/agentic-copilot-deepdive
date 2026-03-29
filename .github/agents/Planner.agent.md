@@ -4,9 +4,17 @@ name: Planner
 tools: ['web/fetch', 'search', 'search/codebase', 'search/usages']
 model: ['Claude Sonnet 4', 'GPT-4o']
 handoffs:
-  - label: Start Implementation
+  - label: "Write Failing Tests"
+    agent: TestWriter
+    prompt: |
+      Based on the plan above, write failing tests that define the expected behavior.
+      Write backend Jest tests in backend/tests/ and E2E Cypress tests in frontend/cypress/e2e/.
+      The tests should FAIL initially because the feature is not yet implemented.
+      Run the tests to confirm they fail with meaningful error messages.
+    send: false
+  - label: "Skip to Implementation"
     agent: Implementer
-    prompt: Implement the plan outlined above.
+    prompt: Implement the plan outlined above. Follow each step carefully and run tests after each change.
     send: false
 ---
 

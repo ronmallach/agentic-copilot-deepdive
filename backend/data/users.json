@@ -39,10 +39,9 @@
     "username": "user2",
     "password": "user2",
     "favorites": [
-      "4",
-      "2",
-      "3",
-      "12"
+      "12",
+      "6",
+      "8"
     ],
     "wantToRead": []
   },

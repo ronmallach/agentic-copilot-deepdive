@@ -1,8 +1,8 @@
-.search-page {
+.searchPage {
   color: #333;
 }
 
-.search-form {
+.searchForm {
   background: #fff;
   padding: 2rem;
   border-radius: 8px;
@@ -18,7 +18,7 @@
   gap: 1rem;
 }
 
-.search-input {
+.searchInput {
   width: 100%;
   padding: 0.75rem;
   font-size: 1rem;
@@ -30,18 +30,18 @@
   background: #fff;
 }
 
-.search-input:focus {
+.searchInput:focus {
   outline: none;
   border-color: #20b2aa;
   box-shadow: 0 0 0 2px rgba(32, 178, 170, 0.2);
 }
 
-.button-group {
+.buttonGroup {
   display: flex;
   gap: 1rem;
 }
 
-.search-button {
+.searchButton {
   background: #20b2aa;
   color: #fff;
   border: none;
@@ -71,11 +71,11 @@
   margin: 0;
 }
 
-.clear-button:hover {
+.clearButton:hover {
   background: #545b62;
 }
 
-.error-message {
+.errorMessage {
   color: #dc3545;
   background: #f8d7da;
   border: 1px solid #f5c6cb;
@@ -92,7 +92,7 @@
   color: #20b2aa;
 }
 
-.no-results {
+.noResults {
   text-align: center;
   padding: 2rem;
   color: #6c757d;
@@ -102,14 +102,14 @@
   max-width: 600px;
 }
 
-.pagination-info {
+.paginationInfo {
   text-align: center;
   margin: 1rem 0;
   color: #6c757d;
   font-size: 0.9rem;
 }
 
-.result-grid {
+.resultGrid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
   gap: 2rem;
@@ -121,11 +121,11 @@
   box-sizing: border-box;
 }
 
-.book-card-with-heart {
+.bookCardWithHeart {
   position: relative;
 }
 
-.book-card {
+.bookCard {
   background: #fff;
   border-radius: 10px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.07);
@@ -150,20 +150,20 @@
   filter: drop-shadow(0 2px 6px #e2555540);
 }
 
-.book-title {
+.bookTitle {
   font-size: 1.1rem;
   font-weight: 600;
   margin-bottom: 0.5rem;
   color: #20b2aa;
 }
 
-.book-author {
+.bookAuthor {
   font-size: 0.98rem;
   color: #555;
   margin-bottom: 1rem;
 }
 
-.favorite-button {
+.favoriteButton {
   background: #20b2aa;
   color: #fff;
   border: none;
@@ -176,7 +176,7 @@
   transition: background 0.2s;
 }
 
-.favorite-button:hover {
+.favoriteButton:hover {
   background: #178d8d;
 }
 
@@ -187,7 +187,7 @@
   margin: 2rem 0;
 }
 
-.page-button {
+.pageButton {
   background: #007bff;
   color: #fff;
   border: none;

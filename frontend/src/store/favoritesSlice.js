@@ -1,14 +1,21 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
+import { logout } from './userSlice';
 
-export const fetchFavorites = createAsyncThunk('favorites/fetchFavorites', async (token, { rejectWithValue }) => {
+export const fetchFavorites = createAsyncThunk('favorites/fetchFavorites', async (token, { rejectWithValue, dispatch }) => {
   const res = await fetch('http://localhost:4000/api/favorites', {
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) return rejectWithValue(await res.json());
+  if (!res.ok) {
+    if (res.status === 403) {
+      // generated-by-copilot: token expired, log user out
+      dispatch(logout());
+    }
+    return rejectWithValue(await res.json());
+  }
   return res.json();
 });
 
-export const addFavorite = createAsyncThunk('favorites/addFavorite', async ({ token, bookId }, { rejectWithValue }) => {
+export const addFavorite = createAsyncThunk('favorites/addFavorite', async ({ token, bookId }, { rejectWithValue, dispatch }) => {
   const res = await fetch('http://localhost:4000/api/favorites', {
     method: 'POST',
     headers: {
@@ -17,17 +24,29 @@ export const addFavorite = createAsyncThunk('favorites/addFavorite', async ({ to
     },
     body: JSON.stringify({ bookId }),
   });
-  if (!res.ok) return rejectWithValue(await res.json());
+  if (!res.ok) {
+    if (res.status === 403) {
+      // generated-by-copilot: token expired, log user out
+      dispatch(logout());
+    }
+    return rejectWithValue(await res.json());
+  }
   return bookId;
 });
 
 // generated-by-copilot: removes a book from the user's favorites via DELETE /api/favorites/:bookId
-export const removeFavorite = createAsyncThunk('favorites/removeFavorite', async ({ token, bookId }, { rejectWithValue }) => {
+export const removeFavorite = createAsyncThunk('favorites/removeFavorite', async ({ token, bookId }, { rejectWithValue, dispatch }) => {
   const res = await fetch(`http://localhost:4000/api/favorites/${bookId}`, {
     method: 'DELETE',
     headers: { Authorization: `Bearer ${token}` },
   });
-  if (!res.ok) return rejectWithValue(await res.json());
+  if (!res.ok) {
+    if (res.status === 403) {
+      // generated-by-copilot: token expired, log user out
+      dispatch(logout());
+    }
+    return rejectWithValue(await res.json());
+  }
   return bookId;
 });
 
