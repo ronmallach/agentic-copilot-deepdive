@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { fetchFavorites, clearAllFavorites } from '../store/favoritesSlice';
 import { useNavigate } from 'react-router-dom';
@@ -9,6 +9,10 @@ const Favorites = () => {
   const status = useAppSelector(state => state.favorites.status);
   const token = useAppSelector(state => state.user.token);
   const navigate = useNavigate();
+  // generated-by-copilot: local state for the "All favorites cleared" toast
+  const [showToast, setShowToast] = useState(false);
+  const [toastError, setToastError] = useState(false);
+  const toastTimerRef = useRef(null);
 
   useEffect(() => {
     if (!token) {
@@ -18,10 +22,26 @@ const Favorites = () => {
     dispatch(fetchFavorites(token));
   }, [dispatch, token, navigate]);
 
+  // generated-by-copilot: clean up the toast timer on unmount
+  useEffect(() => {
+    return () => {
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+    };
+  }, []);
+
   // generated-by-copilot: handles clearing all favorites with a confirmation dialog
-  const handleClearAll = () => {
+  const handleClearAll = async () => {
     if (window.confirm('Are you sure you want to remove all books from your favorites?')) {
-      dispatch(clearAllFavorites(token));
+      const result = await dispatch(clearAllFavorites(token));
+      if (toastTimerRef.current) clearTimeout(toastTimerRef.current);
+      if (result.meta.requestStatus === 'fulfilled') {
+        setToastError(false);
+        setShowToast(true);
+      } else {
+        setToastError(true);
+        setShowToast(true);
+      }
+      toastTimerRef.current = setTimeout(() => setShowToast(false), 3000);
     }
   };
 
@@ -30,6 +50,25 @@ const Favorites = () => {
 
   return (
     <div>
+      {/* generated-by-copilot: toast notification shown briefly after all favorites are cleared */}
+      {showToast && (
+        <div style={{
+          position: 'fixed',
+          bottom: '2rem',
+          left: '50%',
+          transform: 'translateX(-50%)',
+          background: toastError ? '#e25555' : '#20b2aa',
+          color: '#fff',
+          padding: '0.75rem 1.5rem',
+          borderRadius: '6px',
+          boxShadow: '0 4px 16px rgba(0,0,0,0.18)',
+          fontSize: '1rem',
+          zIndex: 9999,
+          pointerEvents: 'none',
+        }}>
+          {toastError ? 'Failed to clear favorites' : 'All favorites cleared'}
+        </div>
+      )}
       <h2>My Favorite Books</h2>
       {favorites.length === 0 ? (
         <div style={{
