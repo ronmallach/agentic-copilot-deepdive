@@ -1,0 +1,9 @@
+{
+  "name": "bookfaves-qa",
+  "displayName": "Book Favorites QA Suite",
+  "description": "Quality assurance plugin for the Book Favorites app. Bundles a test runner skill (Jest + Cypress), a QA reviewer agent, and a post-test logging hook.",
+  "version": "1.0.0",
+  "publisher": "bookfaves-team",
+  "categories": ["testing", "quality"],
+  "keywords": ["testing", "jest", "cypress", "code-review", "qa"]
+}

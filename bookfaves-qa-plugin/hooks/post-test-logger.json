@@ -1,0 +1,11 @@
+{
+  "hooks": {
+    "PostToolUse": [
+      {
+        "type": "command",
+        "command": "node bookfaves-qa-plugin/hooks/scripts/log-test-results.js",
+        "timeout": 10
+      }
+    ]
+  }
+}
