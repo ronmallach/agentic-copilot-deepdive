@@ -48,14 +48,14 @@ router.post('/', authenticateToken, (req, res) => { ... });
 
 ## HTTP Status Codes
 
-| Situation | Code |
-|-----------|------|
-| Successful read | 200 |
-| Resource created | 201 |
-| Bad request / missing fields | 400 |
-| Unauthorized / invalid token | 401 |
-| Resource not found | 404 |
-| Server error | 500 |
+| Situation                    | Code |
+| ---------------------------- | ---- |
+| Successful read              | 200  |
+| Resource created             | 201  |
+| Bad request / missing fields | 400  |
+| Unauthorized / invalid token | 401  |
+| Resource not found           | 404  |
+| Server error                 | 500  |
 
 ## Error Response Format
 

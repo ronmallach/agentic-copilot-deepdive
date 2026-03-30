@@ -40,7 +40,7 @@ const Register = () => {
         type="text"
         placeholder="Username"
         value={username}
-        onChange={e => setUsername(e.target.value)}
+        onChange={(e) => setUsername(e.target.value)}
         required
       />
       <input
@@ -48,10 +48,12 @@ const Register = () => {
         type="password"
         placeholder="Password"
         value={password}
-        onChange={e => setPassword(e.target.value)}
+        onChange={(e) => setPassword(e.target.value)}
         required
       />
-      <button id="register" type="submit">Register</button>
+      <button id="register" type="submit">
+        Register
+      </button>
     </form>
   );
 };

@@ -19,6 +19,8 @@ function createApiRouter(deps) {
   router.use('/v1', v1Router);
   // generated-by-copilot: redirect root /api to versioned endpoint
   router.use('/', v1Router);
+  // generated-by-copilot: mount auth routes directly for backward compatibility
+  router.use('/', createAuthRouter(deps));
 
   return router;
 }

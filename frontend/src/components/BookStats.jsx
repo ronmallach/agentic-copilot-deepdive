@@ -6,8 +6,8 @@ import styles from '../styles/BookStats.module.css';
 // generated-by-copilot: displays aggregate book statistics from GET /api/books/stats
 function BookStats() {
   const dispatch = useAppDispatch();
-  const stats = useAppSelector(state => state.stats.data);
-  const status = useAppSelector(state => state.stats.status);
+  const stats = useAppSelector((state) => state.stats.data);
+  const status = useAppSelector((state) => state.stats.status);
 
   useEffect(() => {
     dispatch(fetchStats());
@@ -25,7 +25,12 @@ function BookStats() {
       {status === 'succeeded' && stats && (
         <div className={styles['stats-grid']}>
           <div className={styles['stat-card']} data-cy="stat-total-books">
-            <span className={styles['stat-value']}>{stats.totalBooks}</span>
+            <span
+              className={styles['stat-value']}
+              data-cy="stat-total-books-value"
+            >
+              {stats.totalBooks}
+            </span>
             <span className={styles['stat-label']}>Total Books</span>
           </div>
           <div className={styles['stat-card']} data-cy="stat-favorited-books">

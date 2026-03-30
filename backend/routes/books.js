@@ -5,19 +5,34 @@
 
 const express = require('express');
 
-function createBooksRouter({ booksFile, usersFile, readJSON, writeJSON, authenticateToken }) {
+function createBooksRouter({
+  booksFile,
+  usersFile,
+  readJSON,
+  writeJSON,
+  authenticateToken,
+}) {
   const router = express.Router();
 
   router.get('/', (req, res) => {
     try {
       const books = readJSON(booksFile);
       if (!Array.isArray(books)) {
-        return res.status(500).json({ error: { code: 'DATA_ERROR', message: 'An unexpected error occurred.' } });
+        return res.status(500).json({
+          error: {
+            code: 'DATA_ERROR',
+            message: 'An unexpected error occurred.',
+          },
+        });
       }
-      
       res.json(books);
     } catch {
-      res.status(500).json({ error: { code: 'SERVER_ERROR', message: 'An unexpected error occurred.' } });
+      res.status(500).json({
+        error: {
+          code: 'SERVER_ERROR',
+          message: 'An unexpected error occurred.',
+        },
+      });
     }
   });
 
@@ -25,42 +40,58 @@ function createBooksRouter({ booksFile, usersFile, readJSON, writeJSON, authenti
   router.get('/search', (req, res) => {
     const q = req.query.q;
     if (!q || !q.trim()) {
-      return res.status(400).json({ error: { code: 'VALIDATION_ERROR', message: 'Query parameter "q" is required' } });
+      return res.status(400).json({
+        error: {
+          code: 'VALIDATION_ERROR',
+          message: 'Query parameter "q" is required',
+        },
+      });
     }
     try {
       const books = readJSON(booksFile);
       if (!Array.isArray(books)) {
-        return res.status(500).json({ error: { code: 'DATA_ERROR', message: 'An unexpected error occurred.' } });
+        return res.status(500).json({
+          error: {
+            code: 'DATA_ERROR',
+            message: 'An unexpected error occurred.',
+          },
+        });
       }
-      
-      const page = parseInt(req.query.page) || 1;
-      const limit = Math.min(parseInt(req.query.limit) || 10, 100);
+
+      const page = Math.max(1, parseInt(req.query.page, 10) || 1);
+      const limit = Math.min(Math.max(1, parseInt(req.query.limit, 10) || 10), 100);
       const lower = q.toLowerCase();
       // generated-by-copilot: Search both title and author fields with OR logic
-      const filteredBooks = books.filter(book => 
-        book.title.toLowerCase().includes(lower) || 
-        book.author.toLowerCase().includes(lower)
+      const filteredBooks = books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(lower) ||
+          book.author.toLowerCase().includes(lower)
       );
-      
+
       // generated-by-copilot: pagination for search results
       const total = filteredBooks.length;
       const totalPages = Math.ceil(total / limit);
       const startIndex = (page - 1) * limit;
       const endIndex = startIndex + limit;
       const paginatedResults = filteredBooks.slice(startIndex, endIndex);
-      
+
       res.json({
         data: paginatedResults,
         pagination: {
           page,
           limit,
           total,
-          pages: totalPages
+          pages: totalPages,
         },
-        query: q
+        query: q,
       });
     } catch {
-      res.status(500).json({ error: { code: 'SERVER_ERROR', message: 'An unexpected error occurred.' } });
+      res.status(500).json({
+        error: {
+          code: 'SERVER_ERROR',
+          message: 'An unexpected error occurred.',
+        },
+      });
     }
   });
 
@@ -70,17 +101,31 @@ function createBooksRouter({ booksFile, usersFile, readJSON, writeJSON, authenti
       const books = readJSON(booksFile);
       const users = readJSON(usersFile);
       if (!Array.isArray(books) || !Array.isArray(users)) {
-        return res.status(500).json({ error: 'An unexpected error occurred.' });
+        return res.status(500).json({
+          error: {
+            code: 'DATA_ERROR',
+            message: 'An unexpected error occurred.',
+          },
+        });
       }
       // generated-by-copilot: normalize IDs to strings to guard against type mismatches between books and favorites
-      const bookIds = new Set(books.map(b => String(b.id)));
+      const bookIds = new Set(books.map((b) => String(b.id)));
       // generated-by-copilot: filter out orphaned favorites not present in the books catalog, then deduplicate
       const favoritedBooks = new Set(
-        users.flatMap(u => (Array.isArray(u.favorites) ? u.favorites : []).filter(id => id != null && bookIds.has(String(id))))
+        users.flatMap((u) =>
+          (Array.isArray(u.favorites) ? u.favorites : []).filter(
+            (id) => id != null && bookIds.has(String(id))
+          )
+        )
       ).size;
       res.json({ totalBooks: books.length, favoritedBooks });
     } catch {
-      res.status(500).json({ error: { code: 'SERVER_ERROR', message: 'An unexpected error occurred.' } });
+      res.status(500).json({
+        error: {
+          code: 'SERVER_ERROR',
+          message: 'An unexpected error occurred.',
+        },
+      });
     }
   });
 

@@ -43,7 +43,10 @@ describe('GET /api/books', () => {
 ```js
 describe('Favorites', () => {
   it('should add a book to favorites', () => {
-    cy.get('[data-testid="book-item"]').first().find('[data-testid="add-favorite"]').click();
+    cy.get('[data-testid="book-item"]')
+      .first()
+      .find('[data-testid="add-favorite"]')
+      .click();
     cy.get('[data-testid="favorites-list"]').should('contain', 'My Book');
   });
 });

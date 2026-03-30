@@ -15,9 +15,11 @@ describe('Book Stats Page', () => {
     cy.visit('/stats');
     cy.get('[data-cy="stat-total-books"]').should('be.visible');
     // generated-by-copilot: use invoke text to avoid CSS Modules hashed class name selectors
-    cy.get('[data-cy="stat-total-books"]').invoke('text').then(text => {
-      expect(Number(text.trim())).to.be.greaterThan(0);
-    });
+    cy.get('[data-cy="stat-total-books-value"]')
+      .invoke('text')
+      .then((text) => {
+        expect(Number(text.trim())).to.be.greaterThan(0);
+      });
   });
 
   it('displays favorited books stat card', () => {

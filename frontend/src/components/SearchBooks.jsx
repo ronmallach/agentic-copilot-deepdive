@@ -1,7 +1,11 @@
 import React, { useState } from 'react';
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 import { searchBooks, clearSearch } from '../store/booksSlice';
-import { addFavorite, removeFavorite, fetchFavorites } from '../store/favoritesSlice';
+import {
+  addFavorite,
+  removeFavorite,
+  fetchFavorites,
+} from '../store/favoritesSlice';
 import { useNavigate } from 'react-router-dom';
 
 import ReadingListDropdown from './ReadingListDropdown';
@@ -16,9 +20,9 @@ const SearchBooks = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [validationError, setValidationError] = useState('');
 
-  const token = useAppSelector(state => state.user.token);
-  const searchState = useAppSelector(state => state.books.search);
-  const favorites = useAppSelector(state => state.favorites.items);
+  const token = useAppSelector((state) => state.user.token);
+  const searchState = useAppSelector((state) => state.books.search);
+  const favorites = useAppSelector((state) => state.favorites.items);
 
   React.useEffect(() => {
     if (!token) {
@@ -69,13 +73,15 @@ const SearchBooks = () => {
 
   const handlePageChange = async (newPage) => {
     setCurrentPage(newPage);
-    await dispatch(searchBooks({ query: searchState.query, page: newPage, limit: 10 }));
+    await dispatch(
+      searchBooks({ query: searchState.query, page: newPage, limit: 10 })
+    );
   };
 
   return (
     <div className={styles.searchPage}>
       <h2 data-testid="search-page-title">Search Books</h2>
-      
+
       <div className={styles.searchForm}>
         <div className={styles.searchInputGroup}>
           <input
@@ -104,7 +110,7 @@ const SearchBooks = () => {
             </button>
           </div>
         </div>
-        
+
         {validationError && (
           <div data-testid="search-input-error" className={styles.errorMessage}>
             {validationError}
@@ -124,47 +130,67 @@ const SearchBooks = () => {
         </div>
       )}
 
-      {searchState.status === 'succeeded' && searchState.results.length === 0 && (
-        <div data-testid="search-no-results" className={styles.noResults}>
-          No books found for "{searchState.query}". Try a different search term.
-        </div>
-      )}
+      {searchState.status === 'succeeded' &&
+        searchState.results.length === 0 && (
+          <div data-testid="search-no-results" className={styles.noResults}>
+            No books found for "{searchState.query}". Try a different search
+            term.
+          </div>
+        )}
 
       {searchState.status === 'succeeded' && searchState.results.length > 0 && (
         <div data-testid="search-results">
           {searchState.pagination && (
-            <div data-testid="pagination-info" className={styles.paginationInfo}>
-              Page {searchState.pagination.page} of {searchState.pagination.pages} 
-              ({searchState.pagination.total} results for "{searchState.query}")
+            <div
+              data-testid="pagination-info"
+              className={styles.paginationInfo}
+            >
+              Page {searchState.pagination.page} of{' '}
+              {searchState.pagination.pages}({searchState.pagination.total}{' '}
+              results for "{searchState.query}")
             </div>
           )}
-          
+
           <div className={styles.resultGrid}>
-            {searchState.results.map(book => {
-              const isFavorite = favorites.some(fav => fav.id === book.id);
+            {searchState.results.map((book) => {
+              const isFavorite = favorites.some((fav) => fav.id === book.id);
               return (
-                <div 
-                  data-testid="search-result-item" 
-                  className={styles.bookCard + ' ' + styles.bookCardWithHeart} 
+                <div
+                  data-testid="search-result-item"
+                  className={styles.bookCard + ' ' + styles.bookCardWithHeart}
                   key={book.id}
                 >
                   {isFavorite && (
                     <span className={styles.favoriteHeart} title="In Favorites">
-                      <svg width="22" height="22" viewBox="0 0 24 24" fill="#e25555" stroke="#e25555" strokeWidth="1.5">
-                        <path d="M12 21s-6.2-5.2-8.4-7.4C1.2 11.2 1.2 8.1 3.1 6.2c1.9-1.9 5-1.9 6.9 0l2 2 2-2c1.9-1.9 5-1.9 6.9 0 1.9 1.9 1.9 5 0 6.9C18.2 15.8 12 21 12 21z"/>
+                      <svg
+                        width="22"
+                        height="22"
+                        viewBox="0 0 24 24"
+                        fill="#e25555"
+                        stroke="#e25555"
+                        strokeWidth="1.5"
+                      >
+                        <path d="M12 21s-6.2-5.2-8.4-7.4C1.2 11.2 1.2 8.1 3.1 6.2c1.9-1.9 5-1.9 6.9 0l2 2 2-2c1.9-1.9 5-1.9 6.9 0 1.9 1.9 1.9 5 0 6.9C18.2 15.8 12 21 12 21z" />
                       </svg>
                     </span>
                   )}
                   <div className={styles.bookTitle}>{book.title}</div>
                   <div className={styles.bookAuthor}>by {book.author}</div>
                   <button
-                    data-testid={isFavorite ? "remove-favorite-button" : "add-favorite-button"}
+                    data-testid={
+                      isFavorite
+                        ? 'remove-favorite-button'
+                        : 'add-favorite-button'
+                    }
                     className={styles.favoriteButton}
                     onClick={() => handleToggleFavorite(book.id, isFavorite)}
                   >
                     {isFavorite ? 'Remove Favorite' : 'Add to Favorites'}
                   </button>
-                  <ReadingListDropdown bookId={book.id} onAdd={handleAddToReadingList} />
+                  <ReadingListDropdown
+                    bookId={book.id}
+                    onAdd={handleAddToReadingList}
+                  />
                 </div>
               );
             })}
@@ -173,17 +199,21 @@ const SearchBooks = () => {
           {searchState.pagination && searchState.pagination.pages > 1 && (
             <div className={styles.pagination}>
               {searchState.pagination.page > 1 && (
-                <button 
+                <button
                   className={styles.pageButton}
-                  onClick={() => handlePageChange(searchState.pagination.page - 1)}
+                  onClick={() =>
+                    handlePageChange(searchState.pagination.page - 1)
+                  }
                 >
                   Previous
                 </button>
               )}
               {searchState.pagination.page < searchState.pagination.pages && (
-                <button 
+                <button
                   className={styles.pageButton}
-                  onClick={() => handlePageChange(searchState.pagination.page + 1)}
+                  onClick={() =>
+                    handlePageChange(searchState.pagination.page + 1)
+                  }
                 >
                   Next
                 </button>
