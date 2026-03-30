@@ -1,0 +1,376 @@
+{
+  "books": [
+    {
+      "ISBN": "0446310789",
+      "summary": "Set in the American South during the 1930s, this Pulitzer Prize-winning novel follows the story of Scout Finch and her father Atticus as he defends a black man accused of rape, exploring themes of racial injustice, moral growth, and the loss of innocence.",
+      "date": "1960-07-11",
+      "author": "Harper Lee"
+    },
+    {
+      "ISBN": "0451524935",
+      "summary": "A dystopian social science fiction that follows Winston Smith as he rebels against the totalitarian regime of Oceania. The novel explores themes of surveillance, censorship, and the manipulation of truth.",
+      "date": "1949-06-08",
+      "author": "George Orwell"
+    },
+    {
+      "ISBN": "0141439518",
+      "summary": "A romantic novel following Elizabeth Bennet as she deals with issues of manners, upbringing, morality, education, and marriage in the society of the landed gentry of early 19th-century England.",
+      "date": "1813-01-28",
+      "author": "Jane Austen"
+    },
+    {
+      "ISBN": "0743273565",
+      "summary": "Set in the Jazz Age on Long Island, the novel depicts narrator Nick Carraway's interactions with mysterious millionaire Jay Gatsby and Gatsby's obsession to reunite with his former lover, Daisy Buchanan.",
+      "date": "1925-04-10",
+      "author": "F. Scott Fitzgerald"
+    },
+    {
+      "ISBN": "0142437247",
+      "summary": "The epic tale of Captain Ahab's obsessive quest for revenge against Moby Dick, the white whale that bit off his leg. A complex exploration of good and evil, obsession, and nature.",
+      "date": "1851-10-18",
+      "author": "Herman Melville"
+    },
+    {
+      "ISBN": "1400079988",
+      "summary": "An epic novel following five aristocratic families in Russia during the Napoleonic Era, exploring themes of love, war, marriage, and death.",
+      "date": "1869-01-01",
+      "author": "Leo Tolstoy"
+    },
+    {
+      "ISBN": "0316769488",
+      "summary": "The story of 16-year-old Holden Caulfield's three days in New York City after being expelled from his boarding school, exploring themes of teenage alienation and loss of innocence.",
+      "date": "1951-07-16",
+      "author": "J.D. Salinger"
+    },
+    {
+      "ISBN": "0547928227",
+      "summary": "The adventures of home-loving hobbit Bilbo Baggins, who is convinced by the wizard Gandalf to join a group of dwarves in their quest to reclaim their mountain home from a dragon.",
+      "date": "1937-09-21",
+      "author": "J.R.R. Tolkien"
+    },
+    {
+      "ISBN": "0060850524",
+      "summary": "Set in a futuristic World State, the novel anticipates developments in reproductive technology, sleep-learning, psychological manipulation, and classical conditioning that combine to change society.",
+      "date": "1932-01-01",
+      "author": "Aldous Huxley"
+    },
+    {
+      "ISBN": "0679734505",
+      "summary": "A psychological novel that follows Rodion Raskolnikov, an impoverished ex-student in Saint Petersburg who formulates a plan to kill an unscrupulous pawnbroker for her money.",
+      "date": "1866-01-01",
+      "author": "Fyodor Dostoevsky"
+    },
+    {
+      "ISBN": "0525555360",
+      "summary": "A beautiful and heart-wrenching story about two teenagers with cancer who fall in love. The novel explores themes of love, loss, and the meaning of life.",
+      "date": "2012-01-10",
+      "author": "John Green"
+    },
+    {
+      "ISBN": "0439554930",
+      "summary": "The first book in the Harry Potter series, following an orphan boy who discovers he is a wizard and begins his journey at Hogwarts School of Witchcraft and Wizardry.",
+      "date": "1997-06-26",
+      "author": "J.K. Rowling"
+    },
+    {
+      "ISBN": "0307474278",
+      "summary": "A complex thriller following journalist Mikael Blomkvist and hacker Lisbeth Salander as they investigate a decades-old disappearance and uncover dark family secrets.",
+      "date": "2005-08-23",
+      "author": "Stieg Larsson"
+    },
+    {
+      "ISBN": "0316015844",
+      "summary": "A young adult vampire romance novel about Bella Swan and her love for Edward Cullen, a vampire with a conscience who refuses to drink human blood.",
+      "date": "2005-10-05",
+      "author": "Stephenie Meyer"
+    },
+    {
+      "ISBN": "0553593716",
+      "summary": "The first book in A Song of Ice and Fire series, following noble houses vying for control of the Iron Throne in the medieval fantasy world of Westeros.",
+      "date": "1996-08-06",
+      "author": "George R.R. Martin"
+    },
+    {
+      "ISBN": "0307277671",
+      "summary": "A thriller following symbologist Robert Langdon as he investigates a murder in the Louvre and discovers a battle between the Priory of Sion and Opus Dei.",
+      "date": "2003-03-18",
+      "author": "Dan Brown"
+    },
+    {
+      "ISBN": "0553382563",
+      "summary": "The first book in Asimov's Foundation series, chronicling the decline and rebirth of a galactic civilization through the lens of psychohistory.",
+      "date": "1951-05-01",
+      "author": "Isaac Asimov"
+    },
+    {
+      "ISBN": "0385490818",
+      "summary": "A dystopian novel set in a theocratic society where women have lost their rights and are valued only for their reproductive capabilities.",
+      "date": "1985-09-01",
+      "author": "Margaret Atwood"
+    },
+    {
+      "ISBN": "0345391803",
+      "summary": "A comedic science fiction series following Arthur Dent's adventures through space after Earth is demolished to make way for a hyperspace bypass.",
+      "date": "1979-10-12",
+      "author": "Douglas Adams"
+    },
+    {
+      "ISBN": "0307744432",
+      "summary": "A literary thriller set in Barcelona about a boy who discovers a mysterious book and becomes entangled in a dark story spanning decades.",
+      "date": "2001-04-01",
+      "author": "Carlos Ruiz Zafón"
+    },
+    {
+      "ISBN": "0375842207",
+      "summary": "Set during World War II in Germany, this novel follows Liesel Meminger, a young girl who finds solace in books and words while living with her foster family during the rise of Nazi Germany.",
+      "date": "2005-09-01",
+      "author": "Markus Zusak"
+    },
+    {
+      "ISBN": "0316166683",
+      "summary": "A memoir chronicling the author's journey across Italy, India, and Indonesia in search of pleasure, devotion, and balance after a difficult divorce.",
+      "date": "2006-02-16",
+      "author": "Elizabeth Gilbert"
+    },
+    {
+      "ISBN": "0756404741",
+      "summary": "The first book in The Kingkiller Chronicle, following a young man named Kvothe as he recounts his transformation from a magically gifted young man into the most notorious wizard his world has ever seen.",
+      "date": "2007-03-27",
+      "author": "Patrick Rothfuss"
+    },
+    {
+      "ISBN": "0307455925",
+      "summary": "A multi-generational story about Oscar, an overweight Dominican boy, and his family's curse that follows them from the Dominican Republic to New Jersey.",
+      "date": "2007-09-06",
+      "author": "Junot Díaz"
+    },
+    {
+      "ISBN": "0812995343",
+      "summary": "Six nested stories spanning time from the nineteenth century to a post-apocalyptic future, exploring themes of reincarnation, power, and human connection.",
+      "date": "2004-03-02",
+      "author": "David Mitchell"
+    },
+    {
+      "ISBN": "0385494786",
+      "summary": "An intersex coming-of-age story following Calliope Stephanides and three generations of the Greek-American Stephanides family.",
+      "date": "2002-09-04",
+      "author": "Jeffrey Eugenides"
+    },
+    {
+      "ISBN": "0307277789",
+      "summary": "A groundbreaking self-help book that combines psychological and spiritual insights to guide readers through the journey of personal growth.",
+      "date": "1978-03-15",
+      "author": "M. Scott Peck"
+    },
+    {
+      "ISBN": "0679745587",
+      "summary": "The true story of Chris McCandless, a young man who abandoned his possessions and hiked into the Alaskan wilderness in search of adventure and self-reliance.",
+      "date": "1996-01-20",
+      "author": "Jon Krakauer"
+    },
+    {
+      "ISBN": "0345418913",
+      "summary": "A science fiction thriller about historians who use time travel technology to study past events, but find themselves trapped in 14th century France.",
+      "date": "1999-11-16",
+      "author": "Michael Crichton"
+    },
+    {
+      "ISBN": "0375831003",
+      "summary": "A novel narrated by a 15-year-old autistic boy who investigates the mysterious death of a neighbor's dog, leading to discoveries about his family and himself.",
+      "date": "2003-07-31",
+      "author": "Mark Haddon"
+    },
+    {
+      "ISBN": "0679732761",
+      "summary": "A encyclopedic novel following multiple narratives, centering on a film so entertaining its viewers lose interest in anything else.",
+      "date": "1996-02-01",
+      "author": "David Foster Wallace"
+    },
+    {
+      "ISBN": "0316769174",
+      "summary": "A collection of short stories exploring themes of innocence, alienation, and the complex relationships between children and adults.",
+      "date": "1953-04-06",
+      "author": "J.D. Salinger"
+    },
+    {
+      "ISBN": "0312427733",
+      "summary": "A historical novel detailing Thomas Cromwell's rise to power in the court of Henry VIII, exploring themes of political intrigue and personal ambition.",
+      "date": "2009-04-30",
+      "author": "Hilary Mantel"
+    },
+    {
+      "ISBN": "0452284234",
+      "summary": "The story of the Price family, American missionaries who travel to the Belgian Congo in 1959, and how their lives are transformed by their experiences.",
+      "date": "1998-09-24",
+      "author": "Barbara Kingsolver"
+    },
+    {
+      "ISBN": "0812976533",
+      "summary": "A dark fantasy novel following Shadow Moon as he becomes embroiled in a war between old and new gods in contemporary America.",
+      "date": "2001-06-19",
+      "author": "Neil Gaiman"
+    },
+    {
+      "ISBN": "0375724404",
+      "summary": "A powerful allegory about a city where an epidemic of blindness strikes, exploring human nature and social breakdown when civilization's structures disappear.",
+      "date": "1995-10-04",
+      "author": "José Saramago"
+    },
+    {
+      "ISBN": "0316769488",
+      "summary": "The only novel published in Sylvia Plath's lifetime, following a young woman's descent into mental illness while pursuing her dreams in New York City.",
+      "date": "1963-01-14",
+      "author": "Sylvia Plath"
+    },
+    {
+      "ISBN": "0679735779",
+      "summary": "A poetic novel set during World War II, following four people who take refuge in an abandoned Italian villa, exploring themes of identity, love, and war.",
+      "date": "1992-09-30",
+      "author": "Michael Ondaatje"
+    },
+    {
+      "ISBN": "0312427566",
+      "summary": "A dystopian novel about a group of students at an exclusive boarding school who discover their true purpose in a world where human cloning exists.",
+      "date": "2005-04-05",
+      "author": "Kazuo Ishiguro"
+    },
+    {
+      "ISBN": "0385333870",
+      "summary": "A satirical science fiction novel about religion, technology, and the end of the world, following the children of a man who helped create the atomic bomb.",
+      "date": "1963-06-12",
+      "author": "Kurt Vonnegut"
+    },
+    {
+      "ISBN": "0679772873",
+      "summary": "A dreamlike novel following a young man's search for his missing wife in Tokyo, blending elements of detective fiction with surrealism and metaphysics.",
+      "date": "1994-04-12",
+      "author": "Haruki Murakami"
+    },
+    {
+      "ISBN": "0316341684",
+      "summary": "A Pulitzer Prize-winning novel set during World War II, following a blind French girl and a German boy whose paths collide in occupied France.",
+      "date": "2014-05-06",
+      "author": "Anthony Doerr"
+    },
+    {
+      "ISBN": "0679760801",
+      "summary": "A satirical novel about the devil's visit to Moscow, combining supernatural elements with a critique of Soviet society during Stalin's regime.",
+      "date": "1967-05-01",
+      "author": "Mikhail Bulgakov"
+    },
+    {
+      "ISBN": "0812987114",
+      "summary": "A post-apocalyptic novel following a traveling Shakespeare company in a world devastated by a pandemic, exploring art's role in preserving humanity.",
+      "date": "2014-09-09",
+      "author": "Emily St. John Mandel"
+    },
+    {
+      "ISBN": "0374531263",
+      "summary": "An epic novel in five parts, exploring violence, art, and literature through interconnected stories spanning from Mexico to Europe.",
+      "date": "2004-11-11",
+      "author": "Roberto Bolaño"
+    },
+    {
+      "ISBN": "0679735771",
+      "summary": "A collection of linked short stories about American soldiers in Vietnam, blending fact and fiction to explore the nature of war and memory.",
+      "date": "1990-03-01",
+      "author": "Tim O'Brien"
+    },
+    {
+      "ISBN": "0307455178",
+      "summary": "A philosophical novel about a concierge and a precocious girl in a Parisian apartment building, exploring class, beauty, and the meaning of life.",
+      "date": "2006-08-30",
+      "author": "Muriel Barbery"
+    },
+    {
+      "ISBN": "0316228534",
+      "summary": "A science fiction novel set in 2045, where people escape a dystopian reality through a virtual world called the OASIS, leading to a high-stakes contest.",
+      "date": "2011-08-16",
+      "author": "Ernest Cline"
+    },
+    {
+      "ISBN": "0812984965",
+      "summary": "A novel about a powerful internet company that links users' personal emails, banking, and social media into one network, exploring privacy in the digital age.",
+      "date": "2013-10-08",
+      "author": "Dave Eggers"
+    },
+    {
+      "ISBN": "0375725784",
+      "summary": "A novel in stories exploring the intersecting lives of people in the music industry, from the 1970s punk rock scene to the digital age.",
+      "date": "2010-06-08",
+      "author": "Jennifer Egan"
+    },
+    {
+      "ISBN": "0679781585",
+      "summary": "A novel about the Lambert family, exploring the transformation of American life in the late twentieth century through their personal struggles and conflicts.",
+      "date": "2001-09-01",
+      "author": "Jonathan Franzen"
+    },
+    {
+      "ISBN": "0385537855",
+      "summary": "The first book in the Bill Hodges trilogy, following a retired detective pursuing a killer who drove a Mercedes into a crowd of job seekers.",
+      "date": "2014-06-03",
+      "author": "Stephen King"
+    },
+    {
+      "ISBN": "0375719042",
+      "summary": "A Pulitzer Prize-winning novel following two Jewish cousins in Brooklyn who become major figures in the comic book industry during the Golden Age of comics.",
+      "date": "2000-09-19",
+      "author": "Michael Chabon"
+    },
+    {
+      "ISBN": "0316556347",
+      "summary": "A Pulitzer Prize-winning coming-of-age novel about a young boy who loses his mother in a bombing at the Metropolitan Museum of Art.",
+      "date": "2013-10-22",
+      "author": "Donna Tartt"
+    },
+    {
+      "ISBN": "0316324465",
+      "summary": "A science fiction novel set on Mars, following a lowborn miner who infiltrates the ruling class to lead a rebellion against a corrupt society.",
+      "date": "2014-01-28",
+      "author": "Pierce Brown"
+    },
+    {
+      "ISBN": "0812981605",
+      "summary": "The story of Count Alexander Rostov, who is sentenced to house arrest in Moscow's Metropol Hotel by a Bolshevik tribunal.",
+      "date": "2016-09-06",
+      "author": "Amor Towles"
+    },
+    {
+      "ISBN": "0307949486",
+      "summary": "A magical realism novel about a mysterious circus that arrives without warning and opens only at night, centered around a competition between two young magicians.",
+      "date": "2011-09-13",
+      "author": "Erin Morgenstern"
+    },
+    {
+      "ISBN": "0316322423",
+      "summary": "A science fiction novel about a software engineer who has his consciousness uploaded and becomes an artificial intelligence controlling space probes.",
+      "date": "2016-09-20",
+      "author": "Dennis E. Taylor"
+    },
+    {
+      "ISBN": "0316334754",
+      "summary": "A fantasy novel about a woman who makes a Faustian bargain to live forever but is cursed to be forgotten by everyone she meets.",
+      "date": "2020-10-06",
+      "author": "V.E. Schwab"
+    },
+    {
+      "ISBN": "0765326355",
+      "summary": "The first book in The Stormlight Archive series, set in a world of stone and storms where war rages over magical gemstones that transform ordinary people into knights.",
+      "date": "2010-08-31",
+      "author": "Brandon Sanderson"
+    },
+    {
+      "ISBN": "0316187183",
+      "summary": "A science fiction novel about an astronaut who wakes up alone on a spacecraft with no memory of how he got there, tasked with saving humanity.",
+      "date": "2021-05-04",
+      "author": "Andy Weir"
+    },
+    {
+      "ISBN": "0000000000",
+      "summary": "A placeholder entry for testing purposes.",
+      "date": "2025-06-20",
+      "author": "Test Author"
+    }
+  ]
+}
