@@ -1,7 +1,7 @@
 ---
 description: Coordinate complex feature development using specialized worker agents.
 name: Feature Builder
-tools: ['agent', 'read', 'search']
+tools: ['agent', 'read', 'search', 'book-database/*']
 agents: ['FB Planner', 'FB Architect', 'FB Implementer', 'FB QA']
 ---
 
