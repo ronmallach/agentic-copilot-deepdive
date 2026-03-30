@@ -9,6 +9,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 import ReadingListDropdown from './ReadingListDropdown';
+import BookReviews from './BookReviews';
 
 import styles from '../styles/SearchBooks.module.css';
 
@@ -191,6 +192,7 @@ const SearchBooks = () => {
                     bookId={book.id}
                     onAdd={handleAddToReadingList}
                   />
+                  <BookReviews bookId={book.id} />
                 </div>
               );
             })}

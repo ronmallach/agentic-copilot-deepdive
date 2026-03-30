@@ -6,6 +6,7 @@ import { addFavorite, removeFavorite, fetchFavorites } from '../store/favoritesS
 import { useNavigate } from 'react-router-dom';
 
 import ReadingListDropdown from './ReadingListDropdown';
+import BookReviews from './BookReviews';
 
 import styles from '../styles/BookList.module.css';
 
@@ -90,6 +91,7 @@ const BookList = () => {
                   {isFavorite ? 'Remove Favorite' : 'Add to Favorites'}
                 </button>
                 <ReadingListDropdown bookId={book.id} onAdd={handleAddToReadingList} />
+                <BookReviews bookId={book.id} />
               </div>
             );
           })}
