@@ -2,16 +2,21 @@
   "inputs": [
   ],
   "servers": {
-    "book-database": {
-      "command": "node",
-      "args": [
-        "/Users/ronmallach/Code/agentic-copilot-deepdive/solutions/book-database-mcp-server/dist/index.js"
-      ]
-    },
+    // "book-database": {
+    //   "command": "node",
+    //   "args": [
+    //     "/Users/ronmallach/Code/agentic-copilot-deepdive/solutions/book-database-mcp-server/dist/index.js"
+    //   ]
+    // },
     "context7": {
       "type": "stdio",
       "command": "npx",
       "args": ["-y", "@upstash/context7-mcp@latest"]
+    },
+    "book-database": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["book-database-mcp-server/dist/index.js"]
     }
   }
 }
