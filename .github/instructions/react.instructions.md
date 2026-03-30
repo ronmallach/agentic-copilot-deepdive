@@ -45,7 +45,7 @@ Use `useAppDispatch` and `useAppSelector` from `../store/hooks` — never import
 import { useAppDispatch, useAppSelector } from '../store/hooks';
 
 const dispatch = useAppDispatch();
-const books = useAppSelector(state => state.books.items);
+const books = useAppSelector((state) => state.books.items);
 
 // ❌ Bad
 import { useDispatch, useSelector } from 'react-redux';
@@ -71,7 +71,7 @@ return <div className={styles.container}>...</div>;
 Always read `token` from the store and guard authenticated dispatches — redirect to login if missing:
 
 ```js
-const token = useAppSelector(state => state.user.token);
+const token = useAppSelector((state) => state.user.token);
 
 function handleAction() {
   if (!token) {
