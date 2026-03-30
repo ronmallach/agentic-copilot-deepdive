@@ -3,7 +3,7 @@ import { logout } from '../store/userSlice';
 import { useNavigate } from 'react-router-dom';
 
 const Header = () => {
-  const username = useAppSelector(state => state.user.username);
+  const username = useAppSelector((state) => state.user.username);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
@@ -13,28 +13,37 @@ const Header = () => {
   };
 
   return (
-    <header style={{
-      width: '100%',
-      position: 'fixed',
-      top: 0,
-      left: 0,
-      zIndex: 100,
-      background: '#20b2aa',
-      color: '#fff',
-      minHeight: '3.5rem',
-      boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      padding: '0 2rem',
-      boxSizing: 'border-box',
-    }}>
-      <span style={{ fontWeight: 700, fontSize: '1.3rem', letterSpacing: '1px' }}>Book Favorites</span>
+    <header
+      style={{
+        width: '100%',
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        zIndex: 100,
+        background: '#20b2aa',
+        color: '#fff',
+        minHeight: '3.5rem',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.05)',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        padding: '0 2rem',
+        boxSizing: 'border-box',
+      }}
+    >
+      <span
+        style={{ fontWeight: 700, fontSize: '1.3rem', letterSpacing: '1px' }}
+      >
+        Book Favorites
+      </span>
       {/* generated-by-copilot: always-visible stats nav link - public endpoint requires no auth */}
       <a
         id="stats-link"
         href="/stats"
-        onClick={e => { e.preventDefault(); navigate('/stats'); }}
+        onClick={(e) => {
+          e.preventDefault();
+          navigate('/stats');
+        }}
         style={{
           color: '#fff',
           textDecoration: 'none',
@@ -42,10 +51,36 @@ const Header = () => {
           padding: '0.3rem 0.8rem',
           borderRadius: '4px',
           transition: 'background 0.2s',
-          background: window.location.pathname === '/stats' ? 'rgba(255,255,255,0.18)' : 'none',
+          background:
+            window.location.pathname === '/stats'
+              ? 'rgba(255,255,255,0.18)'
+              : 'none',
         }}
       >
         Stats
+      </a>
+      {/* generated-by-copilot: staff-picks is a public route, always visible */}
+      <a
+        id="staff-picks-link"
+        href="/staff-picks"
+        onClick={(e) => {
+          e.preventDefault();
+          navigate('/staff-picks');
+        }}
+        style={{
+          color: '#fff',
+          textDecoration: 'none',
+          fontWeight: 500,
+          padding: '0.3rem 0.8rem',
+          borderRadius: '4px',
+          transition: 'background 0.2s',
+          background:
+            window.location.pathname === '/staff-picks'
+              ? 'rgba(255,255,255,0.18)'
+              : 'none',
+        }}
+      >
+        Staff Picks
       </a>
       {username && (
         <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
@@ -53,7 +88,10 @@ const Header = () => {
             <a
               id="books-link"
               href="/books"
-              onClick={e => { e.preventDefault(); navigate('/books'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/books');
+              }}
               style={{
                 color: '#fff',
                 textDecoration: 'none',
@@ -61,7 +99,10 @@ const Header = () => {
                 padding: '0.3rem 0.8rem',
                 borderRadius: '4px',
                 transition: 'background 0.2s',
-                background: window.location.pathname === '/books' ? 'rgba(255,255,255,0.18)' : 'none',
+                background:
+                  window.location.pathname === '/books'
+                    ? 'rgba(255,255,255,0.18)'
+                    : 'none',
               }}
             >
               Books
@@ -69,7 +110,10 @@ const Header = () => {
             <a
               data-testid="search-link"
               href="/search"
-              onClick={e => { e.preventDefault(); navigate('/search'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/search');
+              }}
               style={{
                 color: '#fff',
                 textDecoration: 'none',
@@ -77,7 +121,10 @@ const Header = () => {
                 padding: '0.3rem 0.8rem',
                 borderRadius: '4px',
                 transition: 'background 0.2s',
-                background: window.location.pathname === '/search' ? 'rgba(255,255,255,0.18)' : 'none',
+                background:
+                  window.location.pathname === '/search'
+                    ? 'rgba(255,255,255,0.18)'
+                    : 'none',
               }}
             >
               Search
@@ -86,7 +133,10 @@ const Header = () => {
               id="favorites-link"
               data-testid="favorites-link"
               href="/favorites"
-              onClick={e => { e.preventDefault(); navigate('/favorites'); }}
+              onClick={(e) => {
+                e.preventDefault();
+                navigate('/favorites');
+              }}
               style={{
                 color: '#fff',
                 textDecoration: 'none',
@@ -94,14 +144,40 @@ const Header = () => {
                 padding: '0.3rem 0.8rem',
                 borderRadius: '4px',
                 transition: 'background 0.2s',
-                background: window.location.pathname === '/favorites' ? 'rgba(255,255,255,0.18)' : 'none',
+                background:
+                  window.location.pathname === '/favorites'
+                    ? 'rgba(255,255,255,0.18)'
+                    : 'none',
               }}
             >
               Favorites
             </a>
           </nav>
-          <span style={{ color: '#fff', fontWeight: 600, whiteSpace: 'nowrap', display: 'inline-block' }}>Hi, {username}</span>
-          <button id="logout" onClick={handleLogout} style={{ padding: '0.3rem 1rem', fontSize: '1rem', background: '#fff', color: '#20b2aa', border: 'none', borderRadius: '4px', cursor: 'pointer' }}>Logout</button>
+          <span
+            style={{
+              color: '#fff',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+              display: 'inline-block',
+            }}
+          >
+            Hi, {username}
+          </span>
+          <button
+            id="logout"
+            onClick={handleLogout}
+            style={{
+              padding: '0.3rem 1rem',
+              fontSize: '1rem',
+              background: '#fff',
+              color: '#20b2aa',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer',
+            }}
+          >
+            Logout
+          </button>
         </div>
       )}
     </header>

@@ -1,6 +1,10 @@
-
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
 import Header from './components/Header';
@@ -9,6 +13,7 @@ import BookList from './components/BookList';
 import SearchBooks from './components/SearchBooks';
 import Favorites from './components/Favorites';
 import BookStats from './components/BookStats';
+import StaffPicks from './components/StaffPicks';
 import Login from './components/Login';
 import Register from './components/Register';
 import './styles/App.module.css';
@@ -24,6 +29,7 @@ function App() {
           <Route path="/search" element={<SearchBooks />} />
           <Route path="/favorites" element={<Favorites />} />
           <Route path="/stats" element={<BookStats />} />
+          <Route path="/staff-picks" element={<StaffPicks />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="*" element={<Navigate to="/" />} />
@@ -33,4 +39,4 @@ function App() {
   );
 }
 
-export default App
+export default App;
