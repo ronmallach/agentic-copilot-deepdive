@@ -1,5 +1,5 @@
-import { PaginationSchema, SearchBooksSchema, GetBookByIsbnSchema, GetBookByTitleSchema, GetBooksByTitleSchema, GetBooksByIsbnListSchema, } from '../schemas/bookSchemas.js';
-import { listBooks, searchBooks, getBookByIsbn, getBookByTitle, getBooksByTitle, getBooksByIsbnList, } from '../services/bookService.js';
+import { PaginationSchema, SearchBooksSchema, GetBookByIsbnSchema, GetBookByTitleSchema, GetBooksByTitleSchema, GetBooksByIsbnListSchema, GetBooksByAuthorSchema, } from '../schemas/bookSchemas.js';
+import { listBooks, searchBooks, getBookByIsbn, getBookByTitle, getBooksByTitle, getBooksByIsbnList, getBooksByAuthor, } from '../services/bookService.js';
 // generated-by-copilot: Register all book catalog tools on the MCP server
 export function registerBookTools(server) {
     server.registerTool('book_database_list_books', {
@@ -198,6 +198,48 @@ Examples:
         },
     }, async ({ isbns }) => {
         const text = getBooksByIsbnList(isbns);
+        return { content: [{ type: 'text', text }] };
+    });
+    server.registerTool('book_database_get_books_by_author', {
+        title: 'Get Books by Author',
+        description: `Return all books whose author field contains the given string (case-insensitive partial match).
+
+Useful for finding all works by a specific author when you know their name or part of it.
+
+Args:
+  - author (string): Author name or partial name to search for (1-200 chars)
+  - limit (number): Maximum results to return, 1-100 (default: 20)
+  - offset (number): Results to skip for pagination (default: 0)
+
+Returns:
+  JSON object with schema:
+  {
+    "total": number,       // Total matching books
+    "count": number,       // Books in this page
+    "offset": number,      // Current offset
+    "items": [
+      { "ISBN": string, "title": string, "author": string }
+    ],
+    "has_more": boolean,
+    "next_offset": number  // Present when has_more is true
+  }
+
+Examples:
+  - Use when: "Show me all books by Tolkien" -> params with author="Tolkien"
+  - Use when: "Find books by J.R.R." -> params with author="J.R.R."
+  - Don't use when: You need to search by title or ISBN (use book_database_search_books)
+
+Error Handling:
+  - Returns empty items array with total=0 if no author matches found`,
+        inputSchema: GetBooksByAuthorSchema,
+        annotations: {
+            readOnlyHint: true,
+            destructiveHint: false,
+            idempotentHint: true,
+            openWorldHint: false,
+        },
+    }, async ({ author, limit, offset }) => {
+        const text = getBooksByAuthor(author, offset, limit);
         return { content: [{ type: 'text', text }] };
     });
 }

@@ -4,4 +4,5 @@ export declare function getBookByTitle(title: string): string;
 export declare function getBookByIsbn(isbn: string): string;
 export declare function getBooksByTitle(titles: string[]): string;
 export declare function getBooksByIsbnList(isbns: string[]): string;
+export declare function getBooksByAuthor(author: string, offset: number, limit: number): string;
 //# sourceMappingURL=bookService.d.ts.map

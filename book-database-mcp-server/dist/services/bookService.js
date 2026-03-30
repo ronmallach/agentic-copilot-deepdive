@@ -113,4 +113,12 @@ export function getBooksByIsbnList(isbns) {
     });
     return truncateIfNeeded(JSON.stringify(results, null, 2));
 }
+// generated-by-copilot: Return all books whose author field contains the given string (case-insensitive partial match)
+export function getBooksByAuthor(author, offset, limit) {
+    const books = loadBooks();
+    const q = author.toLowerCase();
+    const matched = books.filter((b) => b.author.toLowerCase().includes(q));
+    const result = buildPaginatedResult(matched, offset, limit);
+    return truncateIfNeeded(JSON.stringify(result, null, 2));
+}
 //# sourceMappingURL=bookService.js.map

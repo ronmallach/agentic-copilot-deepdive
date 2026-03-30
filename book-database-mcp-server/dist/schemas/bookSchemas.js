@@ -63,4 +63,11 @@ export const GetBooksByIsbnListSchema = z
         .describe('List of ISBN-10 or ISBN-13 values to look up (max 20)'),
 })
     .strict();
+export const GetBooksByAuthorSchema = PaginationSchema.extend({
+    author: z
+        .string()
+        .min(1)
+        .max(200)
+        .describe('Author name or partial name to search for (case-insensitive partial match, e.g., "Tolkien")'),
+}).strict();
 //# sourceMappingURL=bookSchemas.js.map

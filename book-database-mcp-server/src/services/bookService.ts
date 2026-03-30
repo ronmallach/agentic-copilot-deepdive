@@ -86,10 +86,9 @@ export function searchBooks(
 export function getBookByTitle(title: string): string {
   const books = loadBooks();
   const detailsMap = loadDetailsMap();
-  const book = books.find(
-    (b) => b.title.toLowerCase() === title.toLowerCase()
-  );
-  if (!book) return `Error: No book found with title "${title}". Try book_database_search_books to find partial matches.`;
+  const book = books.find((b) => b.title.toLowerCase() === title.toLowerCase());
+  if (!book)
+    return `Error: No book found with title "${title}". Try book_database_search_books to find partial matches.`;
   const details = detailsMap.get(book.ISBN);
   const combined: BookWithDetails = {
     ...book,
@@ -142,4 +141,17 @@ export function getBooksByIsbnList(isbns: string[]): string {
     };
   });
   return truncateIfNeeded(JSON.stringify(results, null, 2));
+}
+
+// generated-by-copilot: Return all books whose author field contains the given string (case-insensitive partial match)
+export function getBooksByAuthor(
+  author: string,
+  offset: number,
+  limit: number
+): string {
+  const books = loadBooks();
+  const q = author.toLowerCase();
+  const matched = books.filter((b) => b.author.toLowerCase().includes(q));
+  const result = buildPaginatedResult(matched, offset, limit);
+  return truncateIfNeeded(JSON.stringify(result, null, 2));
 }

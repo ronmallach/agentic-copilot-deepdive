@@ -54,4 +54,18 @@ export declare const GetBooksByIsbnListSchema: z.ZodObject<{
 }, {
     isbns: string[];
 }>;
+export declare const GetBooksByAuthorSchema: z.ZodObject<{
+    limit: z.ZodDefault<z.ZodNumber>;
+    offset: z.ZodDefault<z.ZodNumber>;
+} & {
+    author: z.ZodString;
+}, "strict", z.ZodTypeAny, {
+    limit: number;
+    offset: number;
+    author: string;
+}, {
+    author: string;
+    limit?: number | undefined;
+    offset?: number | undefined;
+}>;
 //# sourceMappingURL=bookSchemas.d.ts.map
