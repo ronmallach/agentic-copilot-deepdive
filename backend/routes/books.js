@@ -59,7 +59,10 @@ function createBooksRouter({
       }
 
       const page = Math.max(1, parseInt(req.query.page, 10) || 1);
-      const limit = Math.min(Math.max(1, parseInt(req.query.limit, 10) || 10), 100);
+      const limit = Math.min(
+        Math.max(1, parseInt(req.query.limit, 10) || 10),
+        100
+      );
       const lower = q.toLowerCase();
       // generated-by-copilot: Search both title and author fields with OR logic
       const filteredBooks = books.filter(
